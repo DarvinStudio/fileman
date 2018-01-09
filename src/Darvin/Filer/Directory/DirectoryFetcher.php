@@ -37,20 +37,22 @@ class DirectoryFetcher
      */
     public function fetchDirectories($yaml)
     {
-        $config = Yaml::parse($yaml);
+        $parsed = Yaml::parse($yaml);
 
-        if (!isset($config['parameters'])) {
+        if (!isset($parsed['parameters'])) {
             throw new \RuntimeException(sprintf('Configuration must contain root node "parameters" (%s).', $yaml));
         }
+
+        $config = $parsed['parameters'];
 
         $dirs = [];
 
         foreach ($this->params as $param) {
-            if (!isset($config['parameters'][$param])) {
+            if (!array_key_exists($param, $config)) {
                 throw new \RuntimeException(sprintf('Parameter "%s" does not exist (%s).', $param, $yaml));
             }
 
-            $dirs[$param] = $config['parameters'][$param];
+            $dirs[$param] = $config[$param];
         }
 
         return $dirs;
