@@ -9,4 +9,9 @@
  * file that was distributed with this source code.
  */
 
-die("Hello, world!\n");
+require __DIR__.'/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$app = new Application('Filer');
+$app->run();
