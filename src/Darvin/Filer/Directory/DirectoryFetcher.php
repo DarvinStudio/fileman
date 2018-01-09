@@ -34,6 +34,7 @@ class DirectoryFetcher
      * @param string $yaml Configuration YAML
      *
      * @return string[]
+     * @throws \RuntimeException
      */
     public function fetchDirectories($yaml)
     {
