@@ -12,10 +12,12 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use Darvin\Filer\Command\PullCommand;
+use Darvin\Filer\Command\PushCommand;
 use Symfony\Component\Console\Application;
 
 $app = new Application('Filer');
 $app->addCommands([
     new PullCommand(),
+    new PushCommand(),
 ]);
 $app->run();
