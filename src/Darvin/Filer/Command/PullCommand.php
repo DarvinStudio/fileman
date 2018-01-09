@@ -40,6 +40,7 @@ class PullCommand extends AbstractCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->success('Hello, world!');
+        $remoteManager = $this->createRemoteManager($input, $output);
+        $remoteManager->archiveFiles();
     }
 }

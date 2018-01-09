@@ -10,6 +10,7 @@
 
 namespace Darvin\Filer\Manager;
 
+use Darvin\Filer\Directory\DirectoryFetcher;
 use Darvin\Filer\SSH\SSHClient;
 
 /**
@@ -18,9 +19,9 @@ use Darvin\Filer\SSH\SSHClient;
 class RemoteManager
 {
     /**
-     * @var string
+     * @var \Darvin\Filer\Directory\DirectoryFetcher
      */
-    private $projectPath;
+    private $dirFetcher;
 
     /**
      * @var \Darvin\Filer\SSH\SSHClient
@@ -28,12 +29,45 @@ class RemoteManager
     private $sshClient;
 
     /**
-     * @param string                      $projectPath Project path
-     * @param \Darvin\Filer\SSH\SSHClient $sshClient   SSH client
+     * @var string
      */
-    public function __construct($projectPath, SSHClient $sshClient)
+    private $projectPath;
+
+    /**
+     * @var string[]|null
+     */
+    private $dirs;
+
+    /**
+     * @param \Darvin\Filer\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
+     * @param \Darvin\Filer\SSH\SSHClient              $sshClient   SSH client
+     * @param string                                   $projectPath Project path
+     */
+    public function __construct(DirectoryFetcher $dirFetcher, SSHClient $sshClient, $projectPath)
     {
-        $this->projectPath = $projectPath;
+        $this->dirFetcher = $dirFetcher;
         $this->sshClient = $sshClient;
+        $this->projectPath = $projectPath;
+
+        $this->dirs = null;
+    }
+
+    public function archiveFiles()
+    {
+        $this->getDirs();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getDirs()
+    {
+        if (null === $this->dirs) {
+            $yaml = $this->sshClient->exec(sprintf('cat %s/app/config/parameters.yml', $this->projectPath));
+
+            $this->dirs = $this->dirFetcher->fetchDirectories($yaml);
+        }
+
+        return $this->dirs;
     }
 }

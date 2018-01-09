@@ -10,6 +10,7 @@
 
 namespace Darvin\Filer\Command;
 
+use Darvin\Filer\Directory\DirectoryFetcher;
 use Darvin\Filer\Manager\LocalManager;
 use Darvin\Filer\Manager\RemoteManager;
 use Darvin\Filer\SSH\SSHClient;
@@ -68,14 +69,15 @@ DESCRIPTION
         list($user, $host) = $this->getUserAndHost($input);
 
         return new RemoteManager(
-            $input->getArgument('project_path_remote'),
+            new DirectoryFetcher($input->getOption('parameters')),
             new SSHClient(
                 $user,
                 $host,
                 $input->getOption('key'),
                 $input->getOption('password') ? (new SymfonyStyle($input, $output))->askHidden('Please enter password') : null,
                 $input->getOption('port')
-            )
+            ),
+            $input->getArgument('project_path_remote')
         );
     }
 
