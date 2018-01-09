@@ -15,5 +15,16 @@ namespace Darvin\Filer\Manager;
  */
 class LocalManager
 {
+    /**
+     * @var string
+     */
+    private $projectPath;
 
+    /**
+     * @param string $projectPath Project path
+     */
+    public function __construct($projectPath)
+    {
+        $this->projectPath = $projectPath;
+    }
 }

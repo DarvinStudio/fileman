@@ -10,7 +10,6 @@
 
 namespace Darvin\Filer\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -18,13 +17,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Push command
  */
-class PushCommand extends Command
+class PushCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
+        parent::configure();
+
         if (null === $this->getName()) {
             $this->setName('push');
         }

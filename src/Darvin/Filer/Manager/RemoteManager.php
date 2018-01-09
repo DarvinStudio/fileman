@@ -10,10 +10,30 @@
 
 namespace Darvin\Filer\Manager;
 
+use Darvin\Filer\SSH\SSHClient;
+
 /**
  * Remote manager
  */
 class RemoteManager
 {
+    /**
+     * @var string
+     */
+    private $projectPath;
 
+    /**
+     * @var \Darvin\Filer\SSH\SSHClient
+     */
+    private $sshClient;
+
+    /**
+     * @param string                      $projectPath Project path
+     * @param \Darvin\Filer\SSH\SSHClient $sshClient   SSH client
+     */
+    public function __construct($projectPath, SSHClient $sshClient)
+    {
+        $this->projectPath = $projectPath;
+        $this->sshClient = $sshClient;
+    }
 }
