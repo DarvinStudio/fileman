@@ -1,0 +1,14 @@
+{
+    "name":        "darvinstudio/filer",
+    "description": "File management utility",
+    "type":        "project",
+    "license":     "MIT",
+    "authors":     [
+        {
+            "name":     "Darvin Studio",
+            "email":    "info@darvin-studio.ru",
+            "homepage": "https://www.darvin-studio.ru"
+        }
+    ],
+    "require": {}
+}
