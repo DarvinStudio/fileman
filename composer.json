@@ -10,5 +10,12 @@
             "homepage": "https://www.darvin-studio.ru"
         }
     ],
-    "require": {}
+    "require": {
+        "symfony/console": "3.3.*"
+    },
+    "config": {
+        "platform": {
+            "php": "5.6"
+        }
+    }
 }
