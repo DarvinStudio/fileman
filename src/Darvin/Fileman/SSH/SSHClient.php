@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Darvin\Filer\SSH;
+namespace Darvin\Fileman\SSH;
 
 use phpseclib\Crypt\RSA;
 use phpseclib\Net\SCP;

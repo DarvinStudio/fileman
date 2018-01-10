@@ -11,11 +11,11 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use Darvin\Filer\Command\PullCommand;
-use Darvin\Filer\Command\PushCommand;
+use Darvin\Fileman\Command\PullCommand;
+use Darvin\Fileman\Command\PushCommand;
 use Symfony\Component\Console\Application;
 
-$app = new Application('Filer');
+$app = new Application('Fileman');
 $app->addCommands([
     new PullCommand(),
     new PushCommand(),

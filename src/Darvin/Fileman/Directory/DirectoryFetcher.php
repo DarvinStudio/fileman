@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Darvin\Filer\Directory;
+namespace Darvin\Fileman\Directory;
 
 use Symfony\Component\Yaml\Yaml;
 

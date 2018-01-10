@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Darvin\Filer\Manager;
+namespace Darvin\Fileman\Manager;
 
-use Darvin\Filer\Directory\DirectoryFetcher;
-use Darvin\Filer\SSH\SSHClient;
+use Darvin\Fileman\Directory\DirectoryFetcher;
+use Darvin\Fileman\SSH\SSHClient;
 
 /**
  * Remote manager
@@ -19,12 +19,12 @@ use Darvin\Filer\SSH\SSHClient;
 class RemoteManager
 {
     /**
-     * @var \Darvin\Filer\Directory\DirectoryFetcher
+     * @var \Darvin\Fileman\Directory\DirectoryFetcher
      */
     private $dirFetcher;
 
     /**
-     * @var \Darvin\Filer\SSH\SSHClient
+     * @var \Darvin\Fileman\SSH\SSHClient
      */
     private $sshClient;
 
@@ -39,9 +39,9 @@ class RemoteManager
     private $dirs;
 
     /**
-     * @param \Darvin\Filer\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
-     * @param \Darvin\Filer\SSH\SSHClient              $sshClient   SSH client
-     * @param string                                   $projectPath Project path
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
+     * @param \Darvin\Fileman\SSH\SSHClient              $sshClient   SSH client
+     * @param string                                     $projectPath Project path
      */
     public function __construct(DirectoryFetcher $dirFetcher, SSHClient $sshClient, $projectPath)
     {

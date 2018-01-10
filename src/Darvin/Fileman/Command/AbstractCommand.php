@@ -8,12 +8,12 @@
  * file that was distributed with this source code.
  */
 
-namespace Darvin\Filer\Command;
+namespace Darvin\Fileman\Command;
 
-use Darvin\Filer\Directory\DirectoryFetcher;
-use Darvin\Filer\Manager\LocalManager;
-use Darvin\Filer\Manager\RemoteManager;
-use Darvin\Filer\SSH\SSHClient;
+use Darvin\Fileman\Directory\DirectoryFetcher;
+use Darvin\Fileman\Manager\LocalManager;
+use Darvin\Fileman\Manager\RemoteManager;
+use Darvin\Fileman\SSH\SSHClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,7 +51,7 @@ DESCRIPTION
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input Input
      *
-     * @return \Darvin\Filer\Manager\LocalManager
+     * @return \Darvin\Fileman\Manager\LocalManager
      */
     protected function createLocalManager(InputInterface $input)
     {
@@ -62,7 +62,7 @@ DESCRIPTION
      * @param \Symfony\Component\Console\Input\InputInterface   $input  Input
      * @param \Symfony\Component\Console\Output\OutputInterface $output Output
      *
-     * @return \Darvin\Filer\Manager\RemoteManager
+     * @return \Darvin\Fileman\Manager\RemoteManager
      */
     protected function createRemoteManager(InputInterface $input, OutputInterface $output)
     {

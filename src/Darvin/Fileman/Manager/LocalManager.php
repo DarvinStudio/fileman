@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Darvin\Filer\Manager;
+namespace Darvin\Fileman\Manager;
 
 /**
  * Local manager
