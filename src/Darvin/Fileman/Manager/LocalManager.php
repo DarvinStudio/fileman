@@ -53,6 +53,20 @@ class LocalManager
         $this->archiveFilenames = $archiveFilenames;
 
         $this->dirs = null;
+
+        if (function_exists('pcntl_signal')) {
+            pcntl_signal(SIGINT, [$this, '__destruct']);
+        }
+    }
+
+    /**
+     * Removes archives.
+     */
+    public function __destruct()
+    {
+        foreach ($this->archiveFilenames as $filename) {
+            @unlink($this->projectPath.$filename);
+        }
     }
 
     /**
