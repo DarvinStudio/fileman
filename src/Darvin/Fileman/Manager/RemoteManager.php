@@ -98,9 +98,6 @@ class RemoteManager
      */
     public function downloadArchives(callable $callback, $localProjectPath)
     {
-        if (!empty($localProjectPath)) {
-            $localProjectPath .= '/';
-        }
         foreach ($this->archiveFilenames as $filename) {
             $this->sshClient->get(sprintf('%s/%s', $this->projectPath, $filename), $localProjectPath.$filename);
 

@@ -28,13 +28,25 @@ class LocalManager
     private $projectPath;
 
     /**
+     * @var string[]|null
+     */
+    private $dirs;
+
+    /**
      * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
      * @param string                                     $projectPath Project path
      */
     public function __construct(DirectoryFetcher $dirFetcher, $projectPath)
     {
         $this->dirFetcher = $dirFetcher;
+
+        if (!empty($projectPath)) {
+            $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+        }
+
         $this->projectPath = $projectPath;
+
+        $this->dirs = null;
     }
 
     /**
@@ -43,5 +55,25 @@ class LocalManager
     public function getProjectPath()
     {
         return $this->projectPath;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getDirs()
+    {
+        if (null === $this->dirs) {
+            $pathname = $this->projectPath.'app/config/parameters.yml';
+
+            $yaml = @file_get_contents($pathname);
+
+            if (false === $yaml) {
+                throw new \RuntimeException(sprintf('Unable to read configuration file "%s".', $pathname));
+            }
+
+            $this->dirs = $this->dirFetcher->fetchDirectories($yaml);
+        }
+
+        return $this->dirs;
     }
 }
