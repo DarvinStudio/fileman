@@ -27,4 +27,12 @@ class LocalManager
     {
         $this->projectPath = $projectPath;
     }
+
+    /**
+     * @return string
+     */
+    public function getProjectPath()
+    {
+        return $this->projectPath;
+    }
 }

@@ -87,6 +87,23 @@ class RemoteManager
     }
 
     /**
+     * @param string $localProjectPath Local project path
+     *
+     * @return RemoteManager
+     */
+    public function downloadArchives($localProjectPath)
+    {
+        if (!empty($localProjectPath)) {
+            $localProjectPath .= '/';
+        }
+        foreach ($this->archiveFilenames as $filename) {
+            $this->sshClient->get(sprintf('%s/%s', $this->projectPath, $filename), $localProjectPath.$filename);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return RemoteManager
      */
     public function removeArchives()
