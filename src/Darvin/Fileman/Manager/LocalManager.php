@@ -28,14 +28,14 @@ class LocalManager
     private $projectPath;
 
     /**
-     * @var string[]
-     */
-    private $archiveFilenames;
-
-    /**
      * @var array|null
      */
     private $dirs;
+
+    /**
+     * @var string[]
+     */
+    private $filesToRemove;
 
     /**
      * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
@@ -50,8 +50,8 @@ class LocalManager
         $this->dirFetcher = $dirFetcher;
         $this->projectPath = $projectPath;
 
-        $this->archiveFilenames = [];
         $this->dirs = null;
+        $this->filesToRemove = [];
 
         if (function_exists('pcntl_signal')) {
             pcntl_signal(SIGINT, [$this, '__destruct']);
@@ -63,7 +63,7 @@ class LocalManager
      */
     public function __destruct()
     {
-        foreach ($this->archiveFilenames as $filename) {
+        foreach ($this->filesToRemove as $filename) {
             @unlink($this->projectPath.$filename);
         }
     }
@@ -94,7 +94,7 @@ class LocalManager
 
             $zip->close();
 
-            $this->archiveFilenames[] = $filename;
+            $this->filesToRemove[] = $filename;
         }
 
         return $this;
