@@ -59,9 +59,11 @@ class RemoteManager
     }
 
     /**
+     * @param callable $callback Success callback
+     *
      * @return RemoteManager
      */
-    public function archiveFiles()
+    public function archiveFiles(callable $callback)
     {
         $now = new \DateTimeImmutable();
 
@@ -80,6 +82,8 @@ class RemoteManager
 
             $this->sshClient->exec($command);
 
+            $callback($filename);
+
             $this->archiveFilenames[] = $filename;
         }
 
@@ -87,31 +91,38 @@ class RemoteManager
     }
 
     /**
-     * @param string $localProjectPath Local project path
+     * @param callable $callback         Success callback
+     * @param string   $localProjectPath Local project path
      *
      * @return RemoteManager
      */
-    public function downloadArchives($localProjectPath)
+    public function downloadArchives(callable $callback, $localProjectPath)
     {
         if (!empty($localProjectPath)) {
             $localProjectPath .= '/';
         }
         foreach ($this->archiveFilenames as $filename) {
             $this->sshClient->get(sprintf('%s/%s', $this->projectPath, $filename), $localProjectPath.$filename);
+
+            $callback($filename);
         }
 
         return $this;
     }
 
     /**
+     * @param callable $callback Success callback
+     *
      * @return RemoteManager
      */
-    public function removeArchives()
+    public function removeArchives(callable $callback)
     {
         foreach ($this->archiveFilenames as $filename) {
             $command = sprintf('rm %s/%s', $this->projectPath, $filename);
 
             $this->sshClient->exec($command);
+
+            $callback($filename);
         }
 
         return $this;
