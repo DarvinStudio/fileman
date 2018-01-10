@@ -40,6 +40,13 @@ class PushCommand extends AbstractCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->success('Hello, world!');
+        $callback = [$io, 'success'];
+
+        $dirFetcher = $this->createDirectoryFetcher($input);
+
+        $localManager  = $this->createLocalManager($input, $dirFetcher);
+        $remoteManager = $this->createRemoteManager($input, $dirFetcher, $io);
+
+        $archiveFilenames = $localManager->archiveFiles($callback);
     }
 }

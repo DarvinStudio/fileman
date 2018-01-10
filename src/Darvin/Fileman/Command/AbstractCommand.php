@@ -10,6 +10,7 @@
 
 namespace Darvin\Fileman\Command;
 
+use Darvin\Fileman\Archiver\Archiver;
 use Darvin\Fileman\Directory\DirectoryFetcher;
 use Darvin\Fileman\Manager\LocalManager;
 use Darvin\Fileman\Manager\RemoteManager;
@@ -65,7 +66,7 @@ DESCRIPTION
      */
     protected function createLocalManager(InputInterface $input, DirectoryFetcher $dirFetcher)
     {
-        return new LocalManager($dirFetcher, $input->getArgument('project_path_local'));
+        return new LocalManager($dirFetcher, $input->getArgument('project_path_local'), new Archiver());
     }
 
     /**

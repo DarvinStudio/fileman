@@ -10,6 +10,7 @@
 
 namespace Darvin\Fileman\Manager;
 
+use Darvin\Fileman\Archiver\Archiver;
 use Darvin\Fileman\Directory\DirectoryFetcher;
 
 /**
@@ -28,6 +29,11 @@ class LocalManager
     private $projectPath;
 
     /**
+     * @var \Darvin\Fileman\Archiver\Archiver
+     */
+    private $archiver;
+
+    /**
      * @var array|null
      */
     private $dirs;
@@ -40,8 +46,9 @@ class LocalManager
     /**
      * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
      * @param string                                     $projectPath Project path
+     * @param \Darvin\Fileman\Archiver\Archiver          $archiver    Archiver
      */
-    public function __construct(DirectoryFetcher $dirFetcher, $projectPath)
+    public function __construct(DirectoryFetcher $dirFetcher, $projectPath, Archiver $archiver)
     {
         if (!empty($projectPath)) {
             $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
@@ -49,6 +56,7 @@ class LocalManager
 
         $this->dirFetcher = $dirFetcher;
         $this->projectPath = $projectPath;
+        $this->archiver = $archiver;
 
         $this->dirs = null;
         $this->filesToRemove = [];
@@ -62,6 +70,32 @@ class LocalManager
         foreach ($this->filesToRemove as $filename) {
             @unlink($this->projectPath.$filename);
         }
+    }
+
+    /**
+     * @param callable $callback Success callback
+     *
+     * @return array
+     */
+    public function archiveFiles(callable $callback)
+    {
+        $archiveFilenames = [];
+
+        $now = new \DateTimeImmutable();
+
+        foreach ($this->getDirs() as $param => $dir) {
+            $dir = trim($dir, DIRECTORY_SEPARATOR);
+
+            $filename = sprintf('%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $now->format('d-m-Y_H-i-s'));
+
+            $this->archiver->archive(sprintf('%sweb/%s', $this->projectPath, $dir), $this->projectPath.$filename);
+
+            $callback($filename);
+
+            $archiveFilenames[$param] = $this->filesToRemove[] = $filename;
+        }
+
+        return $archiveFilenames;
     }
 
     /**
