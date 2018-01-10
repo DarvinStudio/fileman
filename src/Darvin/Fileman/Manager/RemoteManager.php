@@ -86,6 +86,26 @@ class RemoteManager extends AbstractManager
     /**
      * @param callable $callback Success callback
      */
+    public function extractFiles(callable $callback)
+    {
+        foreach ($this->getDirs() as $param => $dir) {
+            if (!isset($this->archiveFilenames[$param])) {
+                continue;
+            }
+
+            $filename = $this->archiveFilenames[$param];
+
+            $command = sprintf('cd %s && /usr/bin/env unzip -o %s -d web/%s', $this->getProjectPath(), $filename, $dir);
+
+            $this->sshClient->exec($command);
+
+            $callback($filename);
+        }
+    }
+
+    /**
+     * @param callable $callback Success callback
+     */
     public function removeArchives(callable $callback)
     {
         foreach ($this->archiveFilenames as $param => $filename) {

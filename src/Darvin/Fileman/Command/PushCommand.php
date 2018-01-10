@@ -53,6 +53,9 @@ class PushCommand extends AbstractCommand
         $io->comment('Uploading archives...');
         $remoteManager->uploadArchives($callback, $localManager->getProjectPath(), $archiveFilenames);
 
+        $io->comment('Extracting files...');
+        $remoteManager->extractFiles($callback);
+
         $io->comment('Removing remote archives...');
         $remoteManager->removeArchives($callback);
     }
