@@ -59,25 +59,25 @@ DESCRIPTION
     }
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher       Directory fetcher
      * @param \Symfony\Component\Console\Input\InputInterface $input            Input
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher       Directory fetcher
      * @param array                                           $archiveFilenames Archive filenames
      *
      * @return \Darvin\Fileman\Manager\LocalManager
      */
-    protected function createLocalManager(DirectoryFetcher $dirFetcher, InputInterface $input, array $archiveFilenames)
+    protected function createLocalManager(InputInterface $input, DirectoryFetcher $dirFetcher, array $archiveFilenames)
     {
         return new LocalManager($dirFetcher, $input->getArgument('project_path_local'), $archiveFilenames);
     }
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher        $dirFetcher Directory fetcher
      * @param \Symfony\Component\Console\Input\InputInterface   $input      Input
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher        $dirFetcher Directory fetcher
      * @param \Symfony\Component\Console\Output\OutputInterface $output     Output
      *
      * @return \Darvin\Fileman\Manager\RemoteManager
      */
-    protected function createRemoteManager(DirectoryFetcher $dirFetcher, InputInterface $input, OutputInterface $output)
+    protected function createRemoteManager(InputInterface $input, DirectoryFetcher $dirFetcher, OutputInterface $output)
     {
         list($user, $host) = $this->getUserAndHost($input);
 
