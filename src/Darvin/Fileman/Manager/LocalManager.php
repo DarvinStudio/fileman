@@ -52,10 +52,6 @@ class LocalManager
 
         $this->dirs = null;
         $this->filesToRemove = [];
-
-        if (function_exists('pcntl_signal')) {
-            pcntl_signal(SIGINT, [$this, '__destruct']);
-        }
     }
 
     /**
