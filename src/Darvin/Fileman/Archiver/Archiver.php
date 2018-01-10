@@ -70,6 +70,8 @@ class Archiver
     /**
      * @param string $pathname Archive pathname
      * @param string $dir      Directory
+     *
+     * @throws \RuntimeException
      */
     public function extract($pathname, $dir)
     {

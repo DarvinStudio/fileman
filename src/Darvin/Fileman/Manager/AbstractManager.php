@@ -64,6 +64,7 @@ abstract class AbstractManager
 
     /**
      * @return string
+     * @throws \RuntimeException
      */
     abstract protected function getConfigurationYaml();
 
