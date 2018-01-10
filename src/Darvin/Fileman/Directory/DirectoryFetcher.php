@@ -33,7 +33,7 @@ class DirectoryFetcher
     /**
      * @param string $yaml Configuration YAML
      *
-     * @return string[]
+     * @return array
      * @throws \RuntimeException
      */
     public function fetchDirectories($yaml)
@@ -53,7 +53,7 @@ class DirectoryFetcher
                 throw new \RuntimeException(sprintf('Parameter "%s" does not exist (%s).', $param, $yaml));
             }
 
-            $dirs[] = $config[$param];
+            $dirs[$param] = $config[$param];
         }
 
         return $dirs;

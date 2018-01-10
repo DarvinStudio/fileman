@@ -34,12 +34,12 @@ class RemoteManager
     private $sshClient;
 
     /**
-     * @var string[]
+     * @var array
      */
     private $archiveFilenames;
 
     /**
-     * @var string[]|null
+     * @var array|null
      */
     private $dirs;
 
@@ -71,7 +71,7 @@ class RemoteManager
     {
         $now = new \DateTimeImmutable();
 
-        foreach ($this->getDirs() as $dir) {
+        foreach ($this->getDirs() as $param => $dir) {
             $dir = trim($dir, DIRECTORY_SEPARATOR);
 
             $filename = sprintf('%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $now->format('d-m-Y_H-i-s'));
@@ -88,7 +88,7 @@ class RemoteManager
 
             $callback($filename);
 
-            $this->archiveFilenames[] = $filename;
+            $this->archiveFilenames[$param] = $filename;
         }
 
         return $this;
@@ -118,19 +118,29 @@ class RemoteManager
      */
     public function removeArchives(callable $callback)
     {
-        foreach ($this->archiveFilenames as $filename) {
+        foreach ($this->archiveFilenames as $param => $filename) {
             $command = sprintf('rm %s%s', $this->projectPath, $filename);
 
             $this->sshClient->exec($command);
 
             $callback($filename);
+
+            unset($this->archiveFilenames[$param]);
         }
 
         return $this;
     }
 
     /**
-     * @return string[]
+     * @return array
+     */
+    public function getArchiveFilenames()
+    {
+        return $this->archiveFilenames;
+    }
+
+    /**
+     * @return array
      */
     private function getDirs()
     {

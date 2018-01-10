@@ -33,7 +33,7 @@ class LocalManager
     private $archiveFilenames;
 
     /**
-     * @var string[]|null
+     * @var array|null
      */
     private $dirs;
 
@@ -69,7 +69,7 @@ class LocalManager
     }
 
     /**
-     * @return string[]
+     * @return array
      */
     private function getDirs()
     {
