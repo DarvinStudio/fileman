@@ -83,6 +83,10 @@ class LocalManager extends AbstractManager
     public function extractFiles(callable $callback, array $archiveFilenames)
     {
         foreach ($this->getDirs() as $param => $dir) {
+            if (!isset($archiveFilenames[$param])) {
+                continue;
+            }
+
             $filename = $archiveFilenames[$param];
 
             $this->archiver->extract($this->getProjectPath().$filename, sprintf('%sweb/%s', $this->getProjectPath(), $dir));
