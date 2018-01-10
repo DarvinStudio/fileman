@@ -52,9 +52,32 @@ class RemoteManager
         $this->dirs = null;
     }
 
+    /**
+     * @return array
+     */
     public function archiveFiles()
     {
-        $this->getDirs();
+        $filenames = [];
+
+        $now = new \DateTimeImmutable();
+
+        foreach ($this->getDirs() as $dir) {
+            $dir = trim($dir, DIRECTORY_SEPARATOR);
+
+            $filename = $filenames[] = sprintf('%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $now->format('d-m-Y_H-i-s'));
+
+            $command = sprintf(
+                'cd %s/web/%s && /usr/bin/env zip -r %s%s .',
+                $this->projectPath,
+                $dir,
+                str_repeat('../', substr_count($dir, DIRECTORY_SEPARATOR) + 2),
+                $filename
+            );
+
+            $this->sshClient->exec($command);
+        }
+
+        return $filenames;
     }
 
     /**
