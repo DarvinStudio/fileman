@@ -43,7 +43,7 @@ class PullCommand extends AbstractCommand
         $dirFetcher = $this->createDirectoryFetcher($input);
 
         $localManager  = $this->createLocalManager($input, $dirFetcher, []);
-        $remoteManager = $this->createRemoteManager($input, $dirFetcher, $output);
+        $remoteManager = $this->createRemoteManager($input, $dirFetcher, $io);
 
         $callback = [$io, 'success'];
 

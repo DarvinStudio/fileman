@@ -18,7 +18,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -71,13 +70,13 @@ DESCRIPTION
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface   $input      Input
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher        $dirFetcher Directory fetcher
-     * @param \Symfony\Component\Console\Output\OutputInterface $output     Output
+     * @param \Symfony\Component\Console\Input\InputInterface $input      Input
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher Directory fetcher
+     * @param \Symfony\Component\Console\Style\SymfonyStyle   $io         I/O
      *
      * @return \Darvin\Fileman\Manager\RemoteManager
      */
-    protected function createRemoteManager(InputInterface $input, DirectoryFetcher $dirFetcher, OutputInterface $output)
+    protected function createRemoteManager(InputInterface $input, DirectoryFetcher $dirFetcher, SymfonyStyle $io)
     {
         list($user, $host) = $this->getUserAndHost($input);
 
@@ -88,7 +87,7 @@ DESCRIPTION
                 $user,
                 $host,
                 $input->getOption('key'),
-                $input->getOption('password') ? (new SymfonyStyle($input, $output))->askHidden('Please enter password') : null,
+                $input->getOption('password') ? $io->askHidden('Please enter password') : null,
                 $input->getOption('port')
             )
         );
