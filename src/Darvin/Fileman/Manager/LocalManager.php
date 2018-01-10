@@ -28,25 +28,36 @@ class LocalManager
     private $projectPath;
 
     /**
+     * @var array
+     */
+    private $archiveFilenames;
+
+    /**
      * @var string[]|null
      */
     private $dirs;
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
-     * @param string                                     $projectPath Project path
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher       Directory fetcher
+     * @param string                                     $projectPath      Project path
+     * @param array                                      $archiveFilenames Archive filenames
      */
-    public function __construct(DirectoryFetcher $dirFetcher, $projectPath)
+    public function __construct(DirectoryFetcher $dirFetcher, $projectPath, array $archiveFilenames)
     {
-        $this->dirFetcher = $dirFetcher;
-
         if (!empty($projectPath)) {
             $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
         }
 
+        $this->dirFetcher = $dirFetcher;
         $this->projectPath = $projectPath;
+        $this->archiveFilenames = $archiveFilenames;
 
         $this->dirs = null;
+    }
+
+    public function extractFiles()
+    {
+
     }
 
     /**

@@ -59,14 +59,15 @@ DESCRIPTION
     }
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher Directory fetcher
-     * @param \Symfony\Component\Console\Input\InputInterface $input      Input
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher       Directory fetcher
+     * @param \Symfony\Component\Console\Input\InputInterface $input            Input
+     * @param array                                           $archiveFilenames Archive filenames
      *
      * @return \Darvin\Fileman\Manager\LocalManager
      */
-    protected function createLocalManager(DirectoryFetcher $dirFetcher, InputInterface $input)
+    protected function createLocalManager(DirectoryFetcher $dirFetcher, InputInterface $input, array $archiveFilenames)
     {
-        return new LocalManager($dirFetcher, $input->getArgument('project_path_local'));
+        return new LocalManager($dirFetcher, $input->getArgument('project_path_local'), $archiveFilenames);
     }
 
     /**
@@ -82,14 +83,14 @@ DESCRIPTION
 
         return new RemoteManager(
             $dirFetcher,
+            $input->getArgument('project_path_remote'),
             new SSHClient(
                 $user,
                 $host,
                 $input->getOption('key'),
                 $input->getOption('password') ? (new SymfonyStyle($input, $output))->askHidden('Please enter password') : null,
                 $input->getOption('port')
-            ),
-            $input->getArgument('project_path_remote')
+            )
         );
     }
 
