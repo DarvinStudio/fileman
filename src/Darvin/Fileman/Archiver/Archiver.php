@@ -18,17 +18,28 @@ use Symfony\Component\Finder\Finder;
 class Archiver
 {
     /**
-     * @param string $dir             Directory
-     * @param string $archiveFilename Archive filename
+     * @var \ZipArchive
+     */
+    private $zip;
+
+    /**
+     * Archiver constructor.
+     */
+    public function __construct()
+    {
+        $this->zip = new \ZipArchive();
+    }
+
+    /**
+     * @param string $dir      Directory
+     * @param string $pathname Archive pathname
      *
      * @throws \RuntimeException
      */
-    public function archive($dir, $archiveFilename)
+    public function archive($dir, $pathname)
     {
-        $zip = new \ZipArchive();
-
-        if (true !== $zip->open($archiveFilename, \ZipArchive::CREATE)) {
-            throw new \RuntimeException(sprintf('Unable to create archive "%s".', $archiveFilename));
+        if (true !== $this->zip->open($pathname, \ZipArchive::CREATE)) {
+            throw new \RuntimeException(sprintf('Unable to create archive "%s".', $pathname));
         }
         try {
             $finder = (new Finder())->in($dir);
@@ -37,22 +48,39 @@ class Archiver
         }
         /** @var \Symfony\Component\Finder\SplFileInfo $dir */
         foreach ($finder->directories() as $dir) {
-            if (!$zip->addEmptyDir($dir->getRelativePathname())) {
+            if (!$this->zip->addEmptyDir($dir->getRelativePathname())) {
                 throw new \RuntimeException(
-                    sprintf('Unable to create directory "%s" in archive "%s".', $dir->getRelativePathname(), $archiveFilename)
+                    sprintf('Unable to create directory "%s" in archive "%s".', $dir->getRelativePathname(), $pathname)
                 );
             }
         }
         /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder->files() as $file) {
-            if (!$zip->addFile($file->getPathname(), $file->getRelativePathname())) {
+            if (!$this->zip->addFile($file->getPathname(), $file->getRelativePathname())) {
                 throw new \RuntimeException(
-                    sprintf('Unable to add file "%s" to archive "%s".', $file->getPathname(), $archiveFilename)
+                    sprintf('Unable to add file "%s" to archive "%s".', $file->getPathname(), $pathname)
                 );
             }
         }
-        if (!$zip->close()) {
-            throw new \RuntimeException(sprintf('Unable to close archive "%s".', $archiveFilename));
+        if (!$this->zip->close()) {
+            throw new \RuntimeException(sprintf('Unable to close archive "%s".', $pathname));
+        }
+    }
+
+    /**
+     * @param string $pathname Archive pathname
+     * @param string $dir      Directory
+     */
+    public function extract($pathname, $dir)
+    {
+        if (true !== $this->zip->open($pathname)) {
+            throw new \RuntimeException(sprintf('Unable to open archive "%s".', $pathname));
+        }
+        if (!$this->zip->extractTo($dir)) {
+            throw new \RuntimeException(sprintf('Unable to extract files from archive "%s" to directory "%s".', $pathname, $dir));
+        }
+        if (!$this->zip->close()) {
+            throw new \RuntimeException(sprintf('Unable to close archive "%s".', $pathname));
         }
     }
 }

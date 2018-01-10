@@ -82,23 +82,12 @@ class LocalManager extends AbstractManager
      */
     public function extractFiles(callable $callback, array $archiveFilenames)
     {
-        $zip = new \ZipArchive();
-
         foreach ($this->getDirs() as $param => $dir) {
             $filename = $archiveFilenames[$param];
 
-            $pathname = $this->getProjectPath().$filename;
-
-            if (true !== $zip->open($pathname)) {
-                throw new \RuntimeException(sprintf('Unable to open archive "%s" using ZIP.', $pathname));
-            }
-            if (!$zip->extractTo(sprintf('%sweb/%s', $this->getProjectPath(), $dir))) {
-                throw new \RuntimeException(sprintf('Unable to extract files from archive "%s".', $pathname));
-            }
+            $this->archiver->extract($this->getProjectPath().$filename, sprintf('%sweb/%s', $this->getProjectPath(), $dir));
 
             $callback($filename);
-
-            $zip->close();
 
             $this->filesToRemove[] = $filename;
         }
