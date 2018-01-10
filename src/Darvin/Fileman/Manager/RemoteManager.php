@@ -64,8 +64,6 @@ class RemoteManager
 
     /**
      * @param callable $callback Success callback
-     *
-     * @return array
      */
     public function archiveFiles(callable $callback)
     {
@@ -90,8 +88,6 @@ class RemoteManager
 
             $this->archiveFilenames[$param] = $filename;
         }
-
-        return $this->archiveFilenames;
     }
 
     /**
