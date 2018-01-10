@@ -55,9 +55,33 @@ class LocalManager
         $this->dirs = null;
     }
 
-    public function extractFiles()
+    /**
+     * @param callable $callback Success callback
+     *
+     * @return LocalManager
+     */
+    public function extractFiles(callable $callback)
     {
+        $zip = new \ZipArchive();
 
+        foreach ($this->getDirs() as $param => $dir) {
+            $filename = $this->archiveFilenames[$param];
+
+            $pathname = $this->projectPath.$filename;
+
+            if (true !== $zip->open($pathname)) {
+                throw new \RuntimeException(sprintf('Unable to open archive "%s" using ZIP.', $pathname));
+            }
+            if (!$zip->extractTo(sprintf('%sweb/%s', $this->projectPath, $dir))) {
+                throw new \RuntimeException(sprintf('Unable to extract files from archive "%s".', $pathname));
+            }
+
+            $callback($filename);
+
+            $zip->close();
+        }
+
+        return $this;
     }
 
     /**
