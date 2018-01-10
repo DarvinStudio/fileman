@@ -124,8 +124,6 @@ class RemoteManager
             $this->sshClient->exec($command);
 
             $callback($filename);
-
-            unset($this->archiveFilenames[$param]);
         }
 
         return $this;
