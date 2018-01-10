@@ -65,7 +65,7 @@ class RemoteManager
     /**
      * @param callable $callback Success callback
      *
-     * @return RemoteManager
+     * @return array
      */
     public function archiveFiles(callable $callback)
     {
@@ -91,14 +91,14 @@ class RemoteManager
             $this->archiveFilenames[$param] = $filename;
         }
 
-        return $this;
+        return $this->archiveFilenames;
     }
 
     /**
      * @param callable $callback         Success callback
      * @param string   $localProjectPath Local project path
      *
-     * @return RemoteManager
+     * @return array
      */
     public function downloadArchives(callable $callback, $localProjectPath)
     {
@@ -108,13 +108,11 @@ class RemoteManager
             $callback($filename);
         }
 
-        return $this;
+        return $this->archiveFilenames;
     }
 
     /**
      * @param callable $callback Success callback
-     *
-     * @return RemoteManager
      */
     public function removeArchives(callable $callback)
     {
@@ -124,17 +122,9 @@ class RemoteManager
             $this->sshClient->exec($command);
 
             $callback($filename);
+
+            unset($this->archiveFilenames[$param]);
         }
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getArchiveFilenames()
-    {
-        return $this->archiveFilenames;
     }
 
     /**

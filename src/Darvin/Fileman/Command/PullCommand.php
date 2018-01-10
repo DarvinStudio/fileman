@@ -51,12 +51,12 @@ class PullCommand extends AbstractCommand
         $remoteManager->archiveFiles($callback);
 
         $io->comment('Downloading archives...');
-        $remoteManager->downloadArchives($callback, $localManager->getProjectPath());
+        $archiveFilenames = $remoteManager->downloadArchives($callback, $localManager->getProjectPath());
 
         $io->comment('Removing remote archives...');
         $remoteManager->removeArchives($callback);
 
         $io->comment('Extracting files...');
-        $localManager->extractFiles($callback, $remoteManager->getArchiveFilenames());
+        $localManager->extractFiles($callback, $archiveFilenames);
     }
 }
