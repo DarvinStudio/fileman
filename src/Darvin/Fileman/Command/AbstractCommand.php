@@ -58,15 +58,14 @@ DESCRIPTION
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input            Input
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher       Directory fetcher
-     * @param array                                           $archiveFilenames Archive filenames
+     * @param \Symfony\Component\Console\Input\InputInterface $input      Input
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher Directory fetcher
      *
      * @return \Darvin\Fileman\Manager\LocalManager
      */
-    protected function createLocalManager(InputInterface $input, DirectoryFetcher $dirFetcher, array $archiveFilenames)
+    protected function createLocalManager(InputInterface $input, DirectoryFetcher $dirFetcher)
     {
-        return new LocalManager($dirFetcher, $input->getArgument('project_path_local'), $archiveFilenames);
+        return new LocalManager($dirFetcher, $input->getArgument('project_path_local'));
     }
 
     /**

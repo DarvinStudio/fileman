@@ -44,12 +44,11 @@ class PullCommand extends AbstractCommand
 
         $dirFetcher = $this->createDirectoryFetcher($input);
 
+        $localManager  = $this->createLocalManager($input, $dirFetcher);
         $remoteManager = $this->createRemoteManager($input, $dirFetcher, $io);
 
         $io->comment('Archiving remote files...');
         $remoteManager->archiveFiles($callback);
-
-        $localManager = $this->createLocalManager($input, $dirFetcher, $remoteManager->getArchiveFilenames());
 
         $io->comment('Downloading archives...');
         $remoteManager->downloadArchives($callback, $localManager->getProjectPath());
@@ -58,6 +57,6 @@ class PullCommand extends AbstractCommand
         $remoteManager->removeArchives($callback);
 
         $io->comment('Extracting files...');
-        $localManager->extractFiles($callback);
+        $localManager->extractFiles($callback, $remoteManager->getArchiveFilenames());
     }
 }

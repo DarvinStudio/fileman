@@ -28,7 +28,7 @@ class LocalManager
     private $projectPath;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $archiveFilenames;
 
@@ -38,11 +38,10 @@ class LocalManager
     private $dirs;
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher       Directory fetcher
-     * @param string                                     $projectPath      Project path
-     * @param array                                      $archiveFilenames Archive filenames
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
+     * @param string                                     $projectPath Project path
      */
-    public function __construct(DirectoryFetcher $dirFetcher, $projectPath, array $archiveFilenames)
+    public function __construct(DirectoryFetcher $dirFetcher, $projectPath)
     {
         if (!empty($projectPath)) {
             $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
@@ -50,8 +49,8 @@ class LocalManager
 
         $this->dirFetcher = $dirFetcher;
         $this->projectPath = $projectPath;
-        $this->archiveFilenames = $archiveFilenames;
 
+        $this->archiveFilenames = [];
         $this->dirs = null;
 
         if (function_exists('pcntl_signal')) {
@@ -70,16 +69,17 @@ class LocalManager
     }
 
     /**
-     * @param callable $callback Success callback
+     * @param callable $callback         Success callback
+     * @param array    $archiveFilenames Archive filenames
      *
      * @return LocalManager
      */
-    public function extractFiles(callable $callback)
+    public function extractFiles(callable $callback, array $archiveFilenames)
     {
         $zip = new \ZipArchive();
 
         foreach ($this->getDirs() as $param => $dir) {
-            $filename = $this->archiveFilenames[$param];
+            $filename = $archiveFilenames[$param];
 
             $pathname = $this->projectPath.$filename;
 
@@ -93,6 +93,8 @@ class LocalManager
             $callback($filename);
 
             $zip->close();
+
+            $this->archiveFilenames[] = $filename;
         }
 
         return $this;
