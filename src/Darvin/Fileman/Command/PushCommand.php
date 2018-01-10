@@ -47,6 +47,13 @@ class PushCommand extends AbstractCommand
         $localManager  = $this->createLocalManager($input, $dirFetcher);
         $remoteManager = $this->createRemoteManager($input, $dirFetcher, $io);
 
+        $io->comment('Archiving files...');
         $archiveFilenames = $localManager->archiveFiles($callback);
+
+        $io->comment('Uploading archives...');
+        $remoteManager->uploadArchives($callback, $localManager->getProjectPath(), $archiveFilenames);
+
+        $io->comment('Removing remote archives...');
+        $remoteManager->removeArchives($callback);
     }
 }

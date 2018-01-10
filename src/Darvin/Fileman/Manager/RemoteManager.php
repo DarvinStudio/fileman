@@ -100,6 +100,22 @@ class RemoteManager extends AbstractManager
     }
 
     /**
+     * @param callable $callback         Success callback
+     * @param string   $localProjectPath Local project path
+     * @param array    $archiveFilenames Archive filenames
+     */
+    public function uploadArchives(callable $callback, $localProjectPath, array $archiveFilenames)
+    {
+        foreach ($archiveFilenames as $param => $filename) {
+            $this->sshClient->put($localProjectPath.$filename, $this->getProjectPath().$filename);
+
+            $callback($filename);
+
+            $this->archiveFilenames[$param] = $filename;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getConfigurationYaml()

@@ -47,7 +47,7 @@ class PullCommand extends AbstractCommand
         $localManager  = $this->createLocalManager($input, $dirFetcher);
         $remoteManager = $this->createRemoteManager($input, $dirFetcher, $io);
 
-        $io->comment('Archiving remote files...');
+        $io->comment('Archiving files...');
         $archiveFilenames = $remoteManager->archiveFiles($callback);
 
         $io->comment('Downloading archives...');
