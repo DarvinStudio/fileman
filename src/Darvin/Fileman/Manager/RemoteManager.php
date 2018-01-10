@@ -64,6 +64,8 @@ class RemoteManager
 
     /**
      * @param callable $callback Success callback
+     *
+     * @return array
      */
     public function archiveFiles(callable $callback)
     {
@@ -88,13 +90,13 @@ class RemoteManager
 
             $this->archiveFilenames[$param] = $filename;
         }
+
+        return $this->archiveFilenames;
     }
 
     /**
      * @param callable $callback         Success callback
      * @param string   $localProjectPath Local project path
-     *
-     * @return array
      */
     public function downloadArchives(callable $callback, $localProjectPath)
     {
@@ -103,8 +105,6 @@ class RemoteManager
 
             $callback($filename);
         }
-
-        return $this->archiveFilenames;
     }
 
     /**
