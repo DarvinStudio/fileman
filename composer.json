@@ -15,6 +15,7 @@
         "ext-zip": "*",
         "phpseclib/phpseclib": "^2.0",
         "symfony/console": "3.3.*",
+        "symfony/finder": "3.3.*",
         "symfony/yaml": "3.3.*"
     },
     "autoload": {
