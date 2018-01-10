@@ -80,13 +80,17 @@ abstract class AbstractManager
     }
 
     /**
-     * @param string $dir    Directory
-     * @param string $suffix Suffix
+     * @param string      $dir    Directory
+     * @param string|null $suffix Suffix
      *
      * @return string
      */
-    protected function nameArchive($dir, $suffix)
+    protected function nameArchive($dir, $suffix = null)
     {
-        return sprintf('%s_%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $this->now->format('d-m-Y_H-i-s'), $suffix);
+        if (!empty($suffix)) {
+            $suffix = '_'.preg_replace('/[^0-9a-z]+/i', '-', $suffix);
+        }
+
+        return sprintf('%s%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $this->now->format('d-m-Y_H-i-s'), $suffix);
     }
 }

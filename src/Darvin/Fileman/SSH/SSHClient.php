@@ -20,6 +20,11 @@ use phpseclib\Net\SSH2;
 class SSHClient
 {
     /**
+     * @var string
+     */
+    private $host;
+
+    /**
      * @var \phpseclib\Net\SSH2
      */
     private $session;
@@ -40,6 +45,8 @@ class SSHClient
      */
     public function __construct($user, $host, $keyPathname = '.ssh/id_rsa', $password = null, $port = 22)
     {
+        $this->host = $host;
+
         $this->session = new SSH2($host, $port);
         $this->session->enableQuietMode();
 
@@ -99,6 +106,14 @@ class SSHClient
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
     }
 
     /**

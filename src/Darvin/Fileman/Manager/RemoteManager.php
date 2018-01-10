@@ -50,7 +50,7 @@ class RemoteManager extends AbstractManager
     public function archiveFiles(callable $callback)
     {
         foreach ($this->getDirs() as $param => $dir) {
-            $filename = $this->nameArchive($dir, 'remote');
+            $filename = $this->nameArchive($dir, $this->sshClient->getHost());
 
             $command = sprintf(
                 'cd %sweb/%s && /usr/bin/env zip -r %s%s .',
