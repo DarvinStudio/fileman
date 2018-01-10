@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": "^5.6",
+        "ext-zip": "*",
         "phpseclib/phpseclib": "^2.0",
         "symfony/console": "3.3.*",
         "symfony/yaml": "3.3.*"
