@@ -53,7 +53,7 @@ class DirectoryFetcher
                 throw new \RuntimeException(sprintf('Parameter "%s" does not exist (%s).', $param, $yaml));
             }
 
-            $dirs[$param] = $config[$param];
+            $dirs[$param] = trim($config[$param], DIRECTORY_SEPARATOR);
         }
 
         return $dirs;

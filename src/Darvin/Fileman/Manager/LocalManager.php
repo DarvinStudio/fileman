@@ -16,27 +16,12 @@ use Darvin\Fileman\Directory\DirectoryFetcher;
 /**
  * Local manager
  */
-class LocalManager
+class LocalManager extends AbstractManager
 {
-    /**
-     * @var \Darvin\Fileman\Directory\DirectoryFetcher
-     */
-    private $dirFetcher;
-
-    /**
-     * @var string
-     */
-    private $projectPath;
-
     /**
      * @var \Darvin\Fileman\Archiver\Archiver
      */
     private $archiver;
-
-    /**
-     * @var array|null
-     */
-    private $dirs;
 
     /**
      * @var string[]
@@ -50,25 +35,20 @@ class LocalManager
      */
     public function __construct(DirectoryFetcher $dirFetcher, $projectPath, Archiver $archiver)
     {
-        if (!empty($projectPath)) {
-            $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-        }
+        parent::__construct($dirFetcher, $projectPath);
 
-        $this->dirFetcher = $dirFetcher;
-        $this->projectPath = $projectPath;
         $this->archiver = $archiver;
 
-        $this->dirs = null;
         $this->filesToRemove = [];
     }
 
     /**
-     * Removes archives.
+     * Removes files.
      */
     public function __destruct()
     {
         foreach ($this->filesToRemove as $filename) {
-            @unlink($this->projectPath.$filename);
+            @unlink($this->getProjectPath().$filename);
         }
     }
 
@@ -81,14 +61,10 @@ class LocalManager
     {
         $archiveFilenames = [];
 
-        $now = new \DateTimeImmutable();
-
         foreach ($this->getDirs() as $param => $dir) {
-            $dir = trim($dir, DIRECTORY_SEPARATOR);
+            $filename = $this->nameArchive($dir, 'local');
 
-            $filename = sprintf('%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $now->format('d-m-Y_H-i-s'));
-
-            $this->archiver->archive(sprintf('%sweb/%s', $this->projectPath, $dir), $this->projectPath.$filename);
+            $this->archiver->archive(sprintf('%sweb/%s', $this->getProjectPath(), $dir), $this->getProjectPath().$filename);
 
             $callback($filename);
 
@@ -111,12 +87,12 @@ class LocalManager
         foreach ($this->getDirs() as $param => $dir) {
             $filename = $archiveFilenames[$param];
 
-            $pathname = $this->projectPath.$filename;
+            $pathname = $this->getProjectPath().$filename;
 
             if (true !== $zip->open($pathname)) {
                 throw new \RuntimeException(sprintf('Unable to open archive "%s" using ZIP.', $pathname));
             }
-            if (!$zip->extractTo(sprintf('%sweb/%s', $this->projectPath, $dir))) {
+            if (!$zip->extractTo(sprintf('%sweb/%s', $this->getProjectPath(), $dir))) {
                 throw new \RuntimeException(sprintf('Unable to extract files from archive "%s".', $pathname));
             }
 
@@ -131,30 +107,18 @@ class LocalManager
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
-    public function getProjectPath()
+    protected function getConfigurationYaml()
     {
-        return $this->projectPath;
-    }
+        $pathname = $this->getProjectPath().'app/config/parameters.yml';
 
-    /**
-     * @return array
-     */
-    private function getDirs()
-    {
-        if (null === $this->dirs) {
-            $pathname = $this->projectPath.'app/config/parameters.yml';
+        $yaml = @file_get_contents($pathname);
 
-            $yaml = @file_get_contents($pathname);
-
-            if (false === $yaml) {
-                throw new \RuntimeException(sprintf('Unable to read configuration file "%s".', $pathname));
-            }
-
-            $this->dirs = $this->dirFetcher->fetchDirectories($yaml);
+        if (false === $yaml) {
+            throw new \RuntimeException(sprintf('Unable to read configuration file "%s".', $pathname));
         }
 
-        return $this->dirs;
+        return $yaml;
     }
 }

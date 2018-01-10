@@ -16,18 +16,8 @@ use Darvin\Fileman\SSH\SSHClient;
 /**
  * Remote manager
  */
-class RemoteManager
+class RemoteManager extends AbstractManager
 {
-    /**
-     * @var \Darvin\Fileman\Directory\DirectoryFetcher
-     */
-    private $dirFetcher;
-
-    /**
-     * @var string
-     */
-    private $projectPath;
-
     /**
      * @var \Darvin\Fileman\SSH\SSHClient
      */
@@ -39,27 +29,17 @@ class RemoteManager
     private $archiveFilenames;
 
     /**
-     * @var array|null
-     */
-    private $dirs;
-
-    /**
      * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
      * @param string                                     $projectPath Project path
      * @param \Darvin\Fileman\SSH\SSHClient              $sshClient   SSH client
      */
     public function __construct(DirectoryFetcher $dirFetcher, $projectPath, SSHClient $sshClient)
     {
-        if (!empty($projectPath)) {
-            $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
-        }
+        parent::__construct($dirFetcher, $projectPath);
 
-        $this->dirFetcher = $dirFetcher;
-        $this->projectPath = $projectPath;
         $this->sshClient = $sshClient;
 
         $this->archiveFilenames = [];
-        $this->dirs = null;
     }
 
     /**
@@ -69,16 +49,12 @@ class RemoteManager
      */
     public function archiveFiles(callable $callback)
     {
-        $now = new \DateTimeImmutable();
-
         foreach ($this->getDirs() as $param => $dir) {
-            $dir = trim($dir, DIRECTORY_SEPARATOR);
-
-            $filename = sprintf('%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $now->format('d-m-Y_H-i-s'));
+            $filename = $this->nameArchive($dir, 'remote');
 
             $command = sprintf(
                 'cd %sweb/%s && /usr/bin/env zip -r %s%s .',
-                $this->projectPath,
+                $this->getProjectPath(),
                 $dir,
                 str_repeat('../', substr_count($dir, DIRECTORY_SEPARATOR) + 2),
                 $filename
@@ -101,7 +77,7 @@ class RemoteManager
     public function downloadArchives(callable $callback, $localProjectPath)
     {
         foreach ($this->archiveFilenames as $filename) {
-            $this->sshClient->get($this->projectPath.$filename, $localProjectPath.$filename);
+            $this->sshClient->get($this->getProjectPath().$filename, $localProjectPath.$filename);
 
             $callback($filename);
         }
@@ -113,7 +89,7 @@ class RemoteManager
     public function removeArchives(callable $callback)
     {
         foreach ($this->archiveFilenames as $param => $filename) {
-            $command = sprintf('rm %s%s', $this->projectPath, $filename);
+            $command = sprintf('rm %s%s', $this->getProjectPath(), $filename);
 
             $this->sshClient->exec($command);
 
@@ -124,16 +100,10 @@ class RemoteManager
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    private function getDirs()
+    protected function getConfigurationYaml()
     {
-        if (null === $this->dirs) {
-            $yaml = $this->sshClient->exec(sprintf('cat %sapp/config/parameters.yml', $this->projectPath));
-
-            $this->dirs = $this->dirFetcher->fetchDirectories($yaml);
-        }
-
-        return $this->dirs;
+        return $this->sshClient->exec(sprintf('cat %sapp/config/parameters.yml', $this->getProjectPath()));
     }
 }
