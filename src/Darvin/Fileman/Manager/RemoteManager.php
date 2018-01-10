@@ -34,6 +34,11 @@ class RemoteManager
     private $projectPath;
 
     /**
+     * @var string[]
+     */
+    private $archiveFilenames;
+
+    /**
      * @var string[]|null
      */
     private $dirs;
@@ -49,22 +54,21 @@ class RemoteManager
         $this->sshClient = $sshClient;
         $this->projectPath = $projectPath;
 
+        $this->archiveFilenames = [];
         $this->dirs = null;
     }
 
     /**
-     * @return array
+     * @return RemoteManager
      */
     public function archiveFiles()
     {
-        $filenames = [];
-
         $now = new \DateTimeImmutable();
 
         foreach ($this->getDirs() as $dir) {
             $dir = trim($dir, DIRECTORY_SEPARATOR);
 
-            $filename = $filenames[] = sprintf('%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $now->format('d-m-Y_H-i-s'));
+            $filename = sprintf('%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $now->format('d-m-Y_H-i-s'));
 
             $command = sprintf(
                 'cd %s/web/%s && /usr/bin/env zip -r %s%s .',
@@ -75,9 +79,25 @@ class RemoteManager
             );
 
             $this->sshClient->exec($command);
+
+            $this->archiveFilenames[] = $filename;
         }
 
-        return $filenames;
+        return $this;
+    }
+
+    /**
+     * @return RemoteManager
+     */
+    public function removeArchives()
+    {
+        foreach ($this->archiveFilenames as $filename) {
+            $command = sprintf('rm %s/%s', $this->projectPath, $filename);
+
+            $this->sshClient->exec($command);
+        }
+
+        return $this;
     }
 
     /**
