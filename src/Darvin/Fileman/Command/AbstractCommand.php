@@ -51,25 +51,37 @@ DESCRIPTION
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input Input
      *
-     * @return \Darvin\Fileman\Manager\LocalManager
+     * @return \Darvin\Fileman\Directory\DirectoryFetcher
      */
-    protected function createLocalManager(InputInterface $input)
+    protected function createDirectoryFetcher(InputInterface $input)
     {
-        return new LocalManager($input->getArgument('project_path_local'));
+        return new DirectoryFetcher($input->getOption('parameters'));
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface   $input  Input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output Output
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher Directory fetcher
+     * @param \Symfony\Component\Console\Input\InputInterface $input      Input
+     *
+     * @return \Darvin\Fileman\Manager\LocalManager
+     */
+    protected function createLocalManager(DirectoryFetcher $dirFetcher, InputInterface $input)
+    {
+        return new LocalManager($dirFetcher, $input->getArgument('project_path_local'));
+    }
+
+    /**
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher        $dirFetcher Directory fetcher
+     * @param \Symfony\Component\Console\Input\InputInterface   $input      Input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output     Output
      *
      * @return \Darvin\Fileman\Manager\RemoteManager
      */
-    protected function createRemoteManager(InputInterface $input, OutputInterface $output)
+    protected function createRemoteManager(DirectoryFetcher $dirFetcher, InputInterface $input, OutputInterface $output)
     {
         list($user, $host) = $this->getUserAndHost($input);
 
         return new RemoteManager(
-            new DirectoryFetcher($input->getOption('parameters')),
+            $dirFetcher,
             new SSHClient(
                 $user,
                 $host,

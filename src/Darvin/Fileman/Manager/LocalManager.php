@@ -10,21 +10,30 @@
 
 namespace Darvin\Fileman\Manager;
 
+use Darvin\Fileman\Directory\DirectoryFetcher;
+
 /**
  * Local manager
  */
 class LocalManager
 {
     /**
+     * @var \Darvin\Fileman\Directory\DirectoryFetcher
+     */
+    private $dirFetcher;
+
+    /**
      * @var string
      */
     private $projectPath;
 
     /**
-     * @param string $projectPath Project path
+     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
+     * @param string                                     $projectPath Project path
      */
-    public function __construct($projectPath)
+    public function __construct(DirectoryFetcher $dirFetcher, $projectPath)
     {
+        $this->dirFetcher = $dirFetcher;
         $this->projectPath = $projectPath;
     }
 

@@ -40,8 +40,10 @@ class PullCommand extends AbstractCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $localManager  = $this->createLocalManager($input);
-        $remoteManager = $this->createRemoteManager($input, $output);
+        $dirFetcher = $this->createDirectoryFetcher($input);
+
+        $localManager  = $this->createLocalManager($dirFetcher, $input);
+        $remoteManager = $this->createRemoteManager($dirFetcher, $input, $output);
 
         $callback = [$io, 'success'];
 
