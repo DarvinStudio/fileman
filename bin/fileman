@@ -13,11 +13,13 @@ require __DIR__.'/../vendor/autoload.php';
 
 use Darvin\Fileman\Command\PullCommand;
 use Darvin\Fileman\Command\PushCommand;
+use Darvin\Fileman\Command\UpdateCommand;
 use Symfony\Component\Console\Application;
 
 $app = new Application('Fileman', '@package_version@');
 $app->addCommands([
     new PullCommand(),
     new PushCommand(),
+    new UpdateCommand(),
 ]);
 $app->run();
