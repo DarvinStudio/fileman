@@ -1,0 +1,23 @@
+{
+    "main": "bin/fileman",
+    "directories": [
+        "src"
+    ],
+    "finder": [
+        {
+            "in": "vendor",
+            "exclude": ["tests", "Tests"],
+            "name": "*.php"
+        },
+        {
+            "in": "vendor",
+            "exclude": ["tests", "Tests"],
+            "name": "*.json"
+        }
+    ],
+    "output": "fileman.phar",
+    "compactors": "Herrera\\Box\\Compactor\\Php",
+    "compression": "GZ",
+    "git-version": "package_version",
+    "stub": true
+}
