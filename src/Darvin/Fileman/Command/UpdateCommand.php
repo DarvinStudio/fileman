@@ -48,7 +48,7 @@ class UpdateCommand extends Command
         $update = $manifest->findRecent(Parser::toVersion($version), false, true);
 
         if (empty($update)) {
-            $io->comment(sprintf('You are already using latest Fileman version %s.', $version));
+            $io->success(sprintf('You are already using latest Fileman version %s.', $version));
 
             return;
         }
