@@ -77,8 +77,6 @@ class LocalManager extends AbstractManager
     /**
      * @param callable $callback         Success callback
      * @param array    $archiveFilenames Archive filenames
-     *
-     * @return LocalManager
      */
     public function extractFiles(callable $callback, array $archiveFilenames)
     {
@@ -95,8 +93,6 @@ class LocalManager extends AbstractManager
 
             $this->filesToRemove[] = $filename;
         }
-
-        return $this;
     }
 
     /**
