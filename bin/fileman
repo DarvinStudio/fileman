@@ -15,7 +15,7 @@ use Darvin\Fileman\Command\PullCommand;
 use Darvin\Fileman\Command\PushCommand;
 use Symfony\Component\Console\Application;
 
-$app = new Application('Fileman');
+$app = new Application('Fileman', '@package_version@');
 $app->addCommands([
     new PullCommand(),
     new PushCommand(),
