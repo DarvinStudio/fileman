@@ -46,11 +46,11 @@ class Archiver
         } catch (\InvalidArgumentException $ex) {
             throw new \RuntimeException(sprintf('Directory "%s" does not exist.', $dir));
         }
-        /** @var \Symfony\Component\Finder\SplFileInfo $dir */
-        foreach ($finder->directories() as $dir) {
-            if (!$this->zip->addEmptyDir($dir->getRelativePathname())) {
+        /** @var \Symfony\Component\Finder\SplFileInfo $directory */
+        foreach ($finder->directories() as $directory) {
+            if (!$this->zip->addEmptyDir($directory->getRelativePathname())) {
                 throw new \RuntimeException(
-                    sprintf('Unable to create directory "%s" in archive "%s".', $dir->getRelativePathname(), $pathname)
+                    sprintf('Unable to create directory "%s" in archive "%s".', $directory->getRelativePathname(), $pathname)
                 );
             }
         }
