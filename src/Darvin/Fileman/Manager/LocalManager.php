@@ -64,7 +64,9 @@ class LocalManager extends AbstractManager
         foreach ($this->getDirs() as $param => $dir) {
             $filename = $this->nameArchive($dir, 'local');
 
-            $this->archiver->archive(sprintf('%sweb/%s', $this->getProjectPath(), $dir), $this->getProjectPath().$filename);
+            if (!$this->archiver->archive(sprintf('%sweb/%s', $this->getProjectPath(), $dir), $this->getProjectPath().$filename)) {
+                continue;
+            }
 
             $callback($filename);
 

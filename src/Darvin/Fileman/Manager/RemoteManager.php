@@ -132,13 +132,7 @@ class RemoteManager extends AbstractManager
     public function uploadArchives(callable $callback, $localProjectPath, array $archiveFilenames)
     {
         foreach ($archiveFilenames as $param => $filename) {
-            $pathname = $localProjectPath.$filename;
-
-            if (!is_file($pathname)) {
-                continue;
-            }
-
-            $this->sshClient->put($pathname, $this->getProjectPath().$filename);
+            $this->sshClient->put($localProjectPath.$filename, $this->getProjectPath().$filename);
 
             $callback($filename);
 

@@ -34,17 +34,21 @@ class Archiver
      * @param string $dir      Directory
      * @param string $pathname Archive pathname
      *
+     * @return bool
      * @throws \RuntimeException
      */
     public function archive($dir, $pathname)
     {
-        if (true !== $this->zip->open($pathname, \ZipArchive::CREATE)) {
-            throw new \RuntimeException(sprintf('Unable to create archive "%s".', $pathname));
-        }
         try {
             $finder = (new Finder())->in($dir);
         } catch (\InvalidArgumentException $ex) {
-            throw new \RuntimeException(sprintf('Directory "%s" does not exist.', $dir));
+            return false;
+        }
+        if (0 === $finder->count()) {
+            return false;
+        }
+        if (true !== $this->zip->open($pathname, \ZipArchive::CREATE)) {
+            throw new \RuntimeException(sprintf('Unable to create archive "%s".', $pathname));
         }
         /** @var \Symfony\Component\Finder\SplFileInfo $directory */
         foreach ($finder->directories() as $directory) {
@@ -65,6 +69,8 @@ class Archiver
         if (!$this->zip->close()) {
             throw new \RuntimeException(sprintf('Unable to close archive "%s".', $pathname));
         }
+
+        return true;
     }
 
     /**
