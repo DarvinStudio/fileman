@@ -52,15 +52,20 @@ class RemoteManager extends AbstractManager
         foreach ($this->getDirs() as $param => $dir) {
             $filename = $this->nameArchive($dir, $this->sshClient->getHost());
 
+            $dirPathname = sprintf('%sweb/%s', $this->getProjectPath(), $dir);
+
             $command = sprintf(
-                'cd %sweb/%s && /usr/bin/env zip -r %s%s .',
-                $this->getProjectPath(),
-                $dir,
+                'if [ -n "$(ls -A %s 2>/dev/null)" ]; then cd %1$s && /usr/bin/env zip -r %s%s .; fi',
+                $dirPathname,
                 str_repeat('../', substr_count($dir, DIRECTORY_SEPARATOR) + 2),
                 $filename
             );
 
-            $this->sshClient->exec($command);
+            $output = $this->sshClient->exec($command);
+
+            if (empty($output)) {
+                continue;
+            }
 
             $callback($filename);
 
