@@ -55,9 +55,17 @@ class RemoteManager extends AbstractManager
             $dirPathname = sprintf('%sweb/%s', $this->getProjectPath(), $dir);
 
             $command = sprintf(
-                'if [ -n "$(ls -A %s 2>/dev/null)" ]; then cd %1$s && /usr/bin/env zip -r %s%s .; fi',
+                'if [ -n "$(ls -A %s 2>/dev/null)" ]
+                then
+                    cd %1$s && /usr/bin/env zip -r %s%s .
+                    while [ ! -f %s ]
+                    do
+                        sleep 1
+                    done
+                fi',
                 $dirPathname,
                 str_repeat('../', substr_count($dir, DIRECTORY_SEPARATOR) + 2),
+                $filename,
                 $filename
             );
 
