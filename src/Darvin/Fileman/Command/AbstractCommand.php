@@ -112,7 +112,7 @@ DESCRIPTION
             return $path;
         }
 
-        return sprintf('www/%s.%s', $this->getCurrentDir(), $host);
+        return implode('.', [$this->getCurrentDir(), $host]);
     }
 
     /**
