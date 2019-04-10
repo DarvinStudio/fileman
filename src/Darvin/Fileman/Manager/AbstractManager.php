@@ -92,6 +92,6 @@ abstract class AbstractManager
             $suffix = '_'.preg_replace('/[^0-9a-z]+/i', '-', $suffix);
         }
 
-        return sprintf('%s%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $suffix, $this->now->format('d-m-Y_H-i-s'));
+        return sprintf('%s%s_%s.zip', str_replace(DIRECTORY_SEPARATOR, '_', $dir), $suffix, $this->now->format('Y-m-d_H-i'));
     }
 }
