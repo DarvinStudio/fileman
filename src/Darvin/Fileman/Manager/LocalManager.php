@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author    Igor Nikolaev <igor.sv.n@gmail.com>
- * @copyright Copyright (c) 2018, Darvin Studio
+ * @copyright Copyright (c) 2018-2019, Darvin Studio
  * @link      https://www.darvin-studio.ru
  *
  * For the full copyright and license information, please view the LICENSE
@@ -33,7 +33,7 @@ class LocalManager extends AbstractManager
      * @param string                                     $projectPath Project path
      * @param \Darvin\Fileman\Archiver\ArchiverInterface $archiver    Archiver
      */
-    public function __construct(DirectoryFetcher $dirFetcher, $projectPath, ArchiverInterface $archiver)
+    public function __construct(DirectoryFetcher $dirFetcher, string $projectPath, ArchiverInterface $archiver)
     {
         parent::__construct($dirFetcher, $projectPath);
 
@@ -57,7 +57,7 @@ class LocalManager extends AbstractManager
      *
      * @return array
      */
-    public function archiveFiles(callable $callback)
+    public function archiveFiles(callable $callback): array
     {
         $archiveFilenames = [];
 
@@ -80,7 +80,7 @@ class LocalManager extends AbstractManager
      * @param callable $callback         Success callback
      * @param array    $archiveFilenames Archive filenames
      */
-    public function extractFiles(callable $callback, array $archiveFilenames)
+    public function extractFiles(callable $callback, array $archiveFilenames): void
     {
         foreach ($this->getDirs() as $param => $dir) {
             if (!isset($archiveFilenames[$param])) {
@@ -100,7 +100,7 @@ class LocalManager extends AbstractManager
     /**
      * {@inheritdoc}
      */
-    protected function getConfigurationYaml()
+    protected function getConfigurationYaml(): string
     {
         $pathname = $this->getProjectPath().'app/config/parameters.yml';
 

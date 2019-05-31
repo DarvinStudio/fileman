@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author    Igor Nikolaev <igor.sv.n@gmail.com>
- * @copyright Copyright (c) 2017-2018, Darvin Studio
+ * @copyright Copyright (c) 2017-2019, Darvin Studio
  * @link      https://www.darvin-studio.ru
  *
  * For the full copyright and license information, please view the LICENSE
@@ -27,9 +27,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 abstract class AbstractCommand extends Command
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $currentDir = $this->getCurrentDir();
 
@@ -58,7 +58,7 @@ DESCRIPTION
      *
      * @return \Darvin\Fileman\Directory\DirectoryFetcher
      */
-    protected function createDirectoryFetcher(InputInterface $input)
+    protected function createDirectoryFetcher(InputInterface $input): DirectoryFetcher
     {
         return new DirectoryFetcher($input->getOption('parameters'));
     }
@@ -69,7 +69,7 @@ DESCRIPTION
      *
      * @return \Darvin\Fileman\Manager\LocalManager
      */
-    protected function createLocalManager(InputInterface $input, DirectoryFetcher $dirFetcher)
+    protected function createLocalManager(InputInterface $input, DirectoryFetcher $dirFetcher): LocalManager
     {
         return new LocalManager($dirFetcher, $input->getArgument('project_path_local'), new ZipArchiver());
     }
@@ -81,7 +81,7 @@ DESCRIPTION
      *
      * @return \Darvin\Fileman\Manager\RemoteManager
      */
-    protected function createRemoteManager(InputInterface $input, DirectoryFetcher $dirFetcher, SymfonyStyle $io)
+    protected function createRemoteManager(InputInterface $input, DirectoryFetcher $dirFetcher, SymfonyStyle $io): RemoteManager
     {
         list($user, $host) = $this->getUserAndHost($input);
 
@@ -104,7 +104,7 @@ DESCRIPTION
      *
      * @return string
      */
-    private function getProjectPathRemote(InputInterface $input, $host)
+    private function getProjectPathRemote(InputInterface $input, string $host): string
     {
         $path = $input->getArgument('project_path_remote');
 
@@ -121,12 +121,12 @@ DESCRIPTION
      * @return array
      * @throws \InvalidArgumentException
      */
-    private function getUserAndHost(InputInterface $input)
+    private function getUserAndHost(InputInterface $input): array
     {
         $text = $input->getArgument('user@host');
 
         if (1 !== substr_count($text, '@')) {
-            throw new \InvalidArgumentException(sprintf('Argument "user@host" must contain single "@" symbol, got "%s".', $text));
+            return ['www-data', $text];
         }
 
         return explode('@', $text);
@@ -135,7 +135,7 @@ DESCRIPTION
     /**
      * @return string|null
      */
-    private function getCurrentDir()
+    private function getCurrentDir(): ?string
     {
         $cwd = getcwd();
 

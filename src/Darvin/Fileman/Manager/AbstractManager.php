@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author    Igor Nikolaev <igor.sv.n@gmail.com>
- * @copyright Copyright (c) 2018, Darvin Studio
+ * @copyright Copyright (c) 2018-2019, Darvin Studio
  * @link      https://www.darvin-studio.ru
  *
  * For the full copyright and license information, please view the LICENSE
@@ -41,9 +41,9 @@ abstract class AbstractManager
      * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
      * @param string                                     $projectPath Project path
      */
-    public function __construct(DirectoryFetcher $dirFetcher, $projectPath)
+    public function __construct(DirectoryFetcher $dirFetcher, string $projectPath)
     {
-        if (!empty($projectPath)) {
+        if ('' !== $projectPath) {
             $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
         }
 
@@ -57,7 +57,7 @@ abstract class AbstractManager
     /**
      * @return string
      */
-    public function getProjectPath()
+    public function getProjectPath(): string
     {
         return $this->projectPath;
     }
@@ -66,12 +66,12 @@ abstract class AbstractManager
      * @return string
      * @throws \RuntimeException
      */
-    abstract protected function getConfigurationYaml();
+    abstract protected function getConfigurationYaml(): string;
 
     /**
      * @return array
      */
-    protected function getDirs()
+    protected function getDirs(): array
     {
         if (null === $this->dirs) {
             $this->dirs = $this->dirFetcher->fetchDirectories($this->getConfigurationYaml());
@@ -86,7 +86,7 @@ abstract class AbstractManager
      *
      * @return string
      */
-    protected function nameArchive($dir, $suffix = null)
+    protected function nameArchive(string $dir, ?string $suffix = null): string
     {
         if (!empty($suffix)) {
             $suffix = '_'.preg_replace('/[^0-9a-z]+/i', '-', $suffix);

@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author    Igor Nikolaev <igor.sv.n@gmail.com>
- * @copyright Copyright (c) 2017-2018, Darvin Studio
+ * @copyright Copyright (c) 2017-2019, Darvin Studio
  * @link      https://www.darvin-studio.ru
  *
  * For the full copyright and license information, please view the LICENSE
@@ -35,16 +35,25 @@ class SSHClient
     private $scp;
 
     /**
-     * @param string $user        Username
-     * @param string $host        Hostname
-     * @param string $keyPathname Private key file pathname relative to home directory
-     * @param string $password    Password
-     * @param int    $port        Port
+     * @param string      $user        Username
+     * @param string      $host        Hostname
+     * @param string|null $keyPathname Private key file pathname relative to home directory
+     * @param string|null $password    Password
+     * @param mixed|null  $port        Port
      *
      * @throws \RuntimeException
      */
-    public function __construct($user, $host, $keyPathname = '.ssh/id_rsa', $password = null, $port = 22)
+    public function __construct(string $user, string $host, ?string $keyPathname, ?string $password, $port)
     {
+        if (null === $keyPathname) {
+            $keyPathname = '.ssh/id_rsa';
+        }
+        if (null === $port) {
+            $port = 22;
+        }
+
+        $port = (int)$port;
+
         $this->host = $host;
 
         $this->session = new SSH2($host, $port);
@@ -65,7 +74,7 @@ class SSHClient
      * @return string
      * @throws \RuntimeException
      */
-    public function exec($command)
+    public function exec(string $command): string
     {
         $output = $this->session->exec($command);
 
@@ -80,50 +89,44 @@ class SSHClient
      * @param string $remotePathname File remote pathname
      * @param string $localPathname  File local pathname
      *
-     * @return SSHClient
      * @throws \RuntimeException
      */
-    public function get($remotePathname, $localPathname)
+    public function get(string $remotePathname, string $localPathname): void
     {
         if (!$this->getScp()->get($remotePathname, $localPathname)) {
             throw new \RuntimeException(sprintf('Unable to get file "%s".', $remotePathname));
         }
-
-        return $this;
     }
 
     /**
      * @param string $localPathname  File local pathname
      * @param string $remotePathname File remote pathname
      *
-     * @return SSHClient
      * @throws \RuntimeException
      */
-    public function put($localPathname, $remotePathname)
+    public function put(string $localPathname, string $remotePathname): void
     {
         if (!$this->getScp()->put($remotePathname, $localPathname, SCP::SOURCE_LOCAL_FILE)) {
             throw new \RuntimeException(sprintf('Unable to put file "%s".', $remotePathname));
         }
-
-        return $this;
     }
 
     /**
      * @return string
      */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
 
     /**
-     * @param string $pathname Private key file pathname relative to home directory
-     * @param string $password Password
+     * @param string      $pathname Private key file pathname relative to home directory
+     * @param string|null $password Password
      *
      * @return \phpseclib\Crypt\RSA
      * @throws \RuntimeException
      */
-    private function getKey($pathname, $password)
+    private function getKey(string $pathname, ?string $password): ?RSA
     {
         $filename = implode(DIRECTORY_SEPARATOR, [$this->detectHomeDir(), $pathname]);
 
@@ -147,7 +150,7 @@ class SSHClient
      * @return string
      * @throws \RuntimeException
      */
-    private function detectHomeDir()
+    private function detectHomeDir(): string
     {
         if (isset($_SERVER['HOME'])) {
             return $_SERVER['HOME'];
@@ -162,7 +165,7 @@ class SSHClient
     /**
      * @return \phpseclib\Net\SCP
      */
-    private function getScp()
+    private function getScp(): SCP
     {
         if (null === $this->scp) {
             $this->scp = new SCP($this->session);

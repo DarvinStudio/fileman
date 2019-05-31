@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author    Igor Nikolaev <igor.sv.n@gmail.com>
- * @copyright Copyright (c) 2018, Darvin Studio
+ * @copyright Copyright (c) 2018-2019, Darvin Studio
  * @link      https://www.darvin-studio.ru
  *
  * For the full copyright and license information, please view the LICENSE
@@ -33,7 +33,7 @@ class RemoteManager extends AbstractManager
      * @param string                                     $projectPath Project path
      * @param \Darvin\Fileman\SSH\SSHClient              $sshClient   SSH client
      */
-    public function __construct(DirectoryFetcher $dirFetcher, $projectPath, SSHClient $sshClient)
+    public function __construct(DirectoryFetcher $dirFetcher, string $projectPath, SSHClient $sshClient)
     {
         parent::__construct($dirFetcher, $projectPath);
 
@@ -47,7 +47,7 @@ class RemoteManager extends AbstractManager
      *
      * @return array
      */
-    public function archiveFiles(callable $callback)
+    public function archiveFiles(callable $callback): array
     {
         foreach ($this->getDirs() as $param => $dir) {
             $filename = $this->nameArchive($dir, $this->sshClient->getHost());
@@ -87,7 +87,7 @@ class RemoteManager extends AbstractManager
      * @param callable $callback         Success callback
      * @param string   $localProjectPath Local project path
      */
-    public function downloadArchives(callable $callback, $localProjectPath)
+    public function downloadArchives(callable $callback, string $localProjectPath): void
     {
         foreach ($this->archiveFilenames as $filename) {
             $this->sshClient->get($this->getProjectPath().$filename, $localProjectPath.$filename);
@@ -99,7 +99,7 @@ class RemoteManager extends AbstractManager
     /**
      * @param callable $callback Success callback
      */
-    public function extractFiles(callable $callback)
+    public function extractFiles(callable $callback): void
     {
         foreach ($this->getDirs() as $param => $dir) {
             if (!isset($this->archiveFilenames[$param])) {
@@ -119,7 +119,7 @@ class RemoteManager extends AbstractManager
     /**
      * @param callable $callback Success callback
      */
-    public function removeArchives(callable $callback)
+    public function removeArchives(callable $callback): void
     {
         foreach ($this->archiveFilenames as $param => $filename) {
             $command = sprintf('rm %s%s', $this->getProjectPath(), $filename);
@@ -137,7 +137,7 @@ class RemoteManager extends AbstractManager
      * @param string   $localProjectPath Local project path
      * @param array    $archiveFilenames Archive filenames
      */
-    public function uploadArchives(callable $callback, $localProjectPath, array $archiveFilenames)
+    public function uploadArchives(callable $callback, string $localProjectPath, array $archiveFilenames): void
     {
         foreach ($archiveFilenames as $param => $filename) {
             $this->sshClient->put($localProjectPath.$filename, $this->getProjectPath().$filename);
@@ -149,9 +149,9 @@ class RemoteManager extends AbstractManager
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function getConfigurationYaml()
+    protected function getConfigurationYaml(): string
     {
         return $this->sshClient->exec(sprintf('cat %sapp/config/parameters.yml', $this->getProjectPath()));
     }

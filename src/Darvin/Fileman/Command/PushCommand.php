@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author    Igor Nikolaev <igor.sv.n@gmail.com>
- * @copyright Copyright (c) 2018, Darvin Studio
+ * @copyright Copyright (c) 2018-2019, Darvin Studio
  * @link      https://www.darvin-studio.ru
  *
  * For the full copyright and license information, please view the LICENSE
@@ -20,9 +20,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class PushCommand extends AbstractCommand
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -34,7 +34,7 @@ class PushCommand extends AbstractCommand
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
