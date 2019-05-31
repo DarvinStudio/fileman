@@ -98,7 +98,7 @@ class LocalManager extends AbstractManager
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     protected function getConfigurationYaml(): string
     {
