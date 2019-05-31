@@ -50,7 +50,7 @@ class RemoteManager extends AbstractManager implements RemoteManagerInterface
         foreach ($this->getDirs() as $param => $dir) {
             $filename = $this->nameArchive($dir, $this->sshClient->getHost());
 
-            $dirPathname = sprintf('%sweb/%s', $this->getProjectPath(), $dir);
+            $dirPathname = $this->getProjectPath().$dir;
 
             $command = sprintf(
                 'if [ -n "$(ls -A %s 2>/dev/null)" ]
@@ -62,7 +62,7 @@ class RemoteManager extends AbstractManager implements RemoteManagerInterface
                     done
                 fi',
                 $dirPathname,
-                str_repeat('../', substr_count($dir, DIRECTORY_SEPARATOR) + 2),
+                str_repeat('../', substr_count($dir, DIRECTORY_SEPARATOR) + 1),
                 $filename,
                 $filename
             );
@@ -105,7 +105,7 @@ class RemoteManager extends AbstractManager implements RemoteManagerInterface
 
             $filename = $this->archiveFilenames[$param];
 
-            $command = sprintf('cd %s && /usr/bin/env unzip -o %s -d web/%s', $this->getProjectPath(), $filename, $dir);
+            $command = sprintf('cd %s && /usr/bin/env unzip -o %s -d %s', $this->getProjectPath(), $filename, $dir);
 
             $this->sshClient->exec($command);
 
@@ -146,8 +146,13 @@ class RemoteManager extends AbstractManager implements RemoteManagerInterface
     /**
      * {@inheritDoc}
      */
-    protected function getConfigurationYaml(): string
+    protected function readConfiguration(): string
     {
+        try {
+            return $this->sshClient->exec(sprintf('cat %s.env', $this->getProjectPath()));
+        } catch (\RuntimeException $ex) {
+        }
+
         return $this->sshClient->exec(sprintf('cat %sapp/config/parameters.yml', $this->getProjectPath()));
     }
 }

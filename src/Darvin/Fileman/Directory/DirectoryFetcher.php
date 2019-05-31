@@ -10,6 +10,8 @@
 
 namespace Darvin\Fileman\Directory;
 
+use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Dotenv\Exception\FormatException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -18,39 +20,58 @@ use Symfony\Component\Yaml\Yaml;
 class DirectoryFetcher implements DirectoryFetcherInterface
 {
     /**
+     * @var \Symfony\Component\Dotenv\Dotenv
+     */
+    private $dotenv;
+
+    /**
      * @var string[]
      */
     private $params;
 
     /**
-     * @param string[] $params Directory parameters
+     * @param \Symfony\Component\Dotenv\Dotenv $dotenv Dotenv
+     * @param string[]                         $params Directory parameters
      */
-    public function __construct(array $params)
+    public function __construct(Dotenv $dotenv, array $params)
     {
+        $this->dotenv = $dotenv;
         $this->params = $params;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function fetchDirectories(string $yaml): array
+    public function fetchDirectories(string $config): array
     {
-        $parsed = Yaml::parse($yaml);
+        $dotenv = false;
+        $values = null;
 
-        if (!isset($parsed['parameters'])) {
-            throw new \RuntimeException(sprintf('Configuration must contain root node "parameters" (%s).', $yaml));
+        try {
+            $values = $this->dotenv->parse($config);
+
+            $dotenv = true;
+        } catch (FormatException $ex) {
         }
+        if (null === $values) {
+            $yaml = Yaml::parse($config);
 
-        $config = $parsed['parameters'];
-
-        $dirs = [];
-
-        foreach ($this->params as $param) {
-            if (!array_key_exists($param, $config)) {
-                throw new \RuntimeException(sprintf('Parameter "%s" does not exist (%s).', $param, $yaml));
+            if (!isset($yaml['parameters'])) {
+                throw new \RuntimeException(sprintf('Configuration must contain root node "parameters" (%s).', $config));
             }
 
-            $dirs[$param] = trim($config[$param], DIRECTORY_SEPARATOR);
+            $values = $yaml['parameters'];
+        }
+
+        $values = array_combine(array_map('mb_strtolower', array_keys($values)), $values);
+        $dirs   = [];
+
+        foreach ($this->params as $param) {
+            if (!array_key_exists($param, $values)) {
+                throw new \RuntimeException(sprintf('Parameter "%s" does not exist (%s).', $param, $config));
+            }
+
+            $dirs[$param] = implode(DIRECTORY_SEPARATOR, [$dotenv ? 'public' : 'web', trim($values[$param], DIRECTORY_SEPARATOR)]);
         }
 
         return $dirs;

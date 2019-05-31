@@ -23,6 +23,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * Command abstract implementation
@@ -65,7 +66,7 @@ abstract class AbstractCommand extends Command
      */
     protected function createDirectoryFetcher(InputInterface $input): DirectoryFetcherInterface
     {
-        return new DirectoryFetcher($input->getOption('parameters'));
+        return new DirectoryFetcher(new Dotenv(), $input->getOption('parameters'));
     }
 
     /**

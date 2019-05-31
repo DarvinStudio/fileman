@@ -66,7 +66,7 @@ abstract class AbstractManager implements ManagerInterface
      * @return string
      * @throws \RuntimeException
      */
-    abstract protected function getConfigurationYaml(): string;
+    abstract protected function readConfiguration(): string;
 
     /**
      * @return array
@@ -74,7 +74,7 @@ abstract class AbstractManager implements ManagerInterface
     protected function getDirs(): array
     {
         if (null === $this->dirs) {
-            $this->dirs = $this->dirFetcher->fetchDirectories($this->getConfigurationYaml());
+            $this->dirs = $this->dirFetcher->fetchDirectories($this->readConfiguration());
         }
 
         return $this->dirs;

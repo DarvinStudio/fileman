@@ -14,6 +14,7 @@
         "ext-zip": "*",
         "phpseclib/phpseclib": "^2.0",
         "symfony/console": "^4.3",
+        "symfony/dotenv": "^4.3",
         "symfony/finder": "^4.3",
         "symfony/yaml": "^4.3"
     },

@@ -62,7 +62,7 @@ class LocalManager extends AbstractManager implements LocalManagerInterface
         foreach ($this->getDirs() as $param => $dir) {
             $filename = $this->nameArchive($dir, 'local');
 
-            if (!$this->archiver->archive(sprintf('%sweb/%s', $this->getProjectPath(), $dir), $this->getProjectPath().$filename)) {
+            if (!$this->archiver->archive($this->getProjectPath().$dir, $this->getProjectPath().$filename)) {
                 continue;
             }
 
@@ -86,7 +86,7 @@ class LocalManager extends AbstractManager implements LocalManagerInterface
 
             $filename = $archiveFilenames[$param];
 
-            $this->archiver->extract($this->getProjectPath().$filename, sprintf('%sweb/%s', $this->getProjectPath(), $dir));
+            $this->archiver->extract($this->getProjectPath().$filename, $this->getProjectPath().$dir);
 
             $callback($filename);
 
@@ -97,16 +97,24 @@ class LocalManager extends AbstractManager implements LocalManagerInterface
     /**
      * {@inheritDoc}
      */
-    protected function getConfigurationYaml(): string
+    protected function readConfiguration(): string
     {
+        $pathname = $this->getProjectPath().'.env';
+
+        $content = @file_get_contents($pathname);
+
+        if (false !== $content) {
+            return $content;
+        }
+
         $pathname = $this->getProjectPath().'app/config/parameters.yml';
 
-        $yaml = @file_get_contents($pathname);
+        $content = @file_get_contents($pathname);
 
-        if (false === $yaml) {
+        if (false === $content) {
             throw new \RuntimeException(sprintf('Unable to read configuration file "%s".', $pathname));
         }
 
-        return $yaml;
+        return $content;
     }
 }

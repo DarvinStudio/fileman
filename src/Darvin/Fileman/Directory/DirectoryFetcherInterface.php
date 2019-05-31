@@ -16,10 +16,10 @@ namespace Darvin\Fileman\Directory;
 interface DirectoryFetcherInterface
 {
     /**
-     * @param string $yaml Configuration YAML
+     * @param string $config Configuration file content
      *
      * @return array
      * @throws \RuntimeException
      */
-    public function fetchDirectories(string $yaml): array;
+    public function fetchDirectories(string $config): array;
 }
