@@ -10,7 +10,7 @@
 
 namespace Darvin\Fileman\Manager;
 
-use Darvin\Fileman\Archiver\Archiver;
+use Darvin\Fileman\Archiver\ArchiverInterface;
 use Darvin\Fileman\Directory\DirectoryFetcher;
 
 /**
@@ -19,7 +19,7 @@ use Darvin\Fileman\Directory\DirectoryFetcher;
 class LocalManager extends AbstractManager
 {
     /**
-     * @var \Darvin\Fileman\Archiver\Archiver
+     * @var \Darvin\Fileman\Archiver\ArchiverInterface
      */
     private $archiver;
 
@@ -31,9 +31,9 @@ class LocalManager extends AbstractManager
     /**
      * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
      * @param string                                     $projectPath Project path
-     * @param \Darvin\Fileman\Archiver\Archiver          $archiver    Archiver
+     * @param \Darvin\Fileman\Archiver\ArchiverInterface $archiver    Archiver
      */
-    public function __construct(DirectoryFetcher $dirFetcher, $projectPath, Archiver $archiver)
+    public function __construct(DirectoryFetcher $dirFetcher, $projectPath, ArchiverInterface $archiver)
     {
         parent::__construct($dirFetcher, $projectPath);
 

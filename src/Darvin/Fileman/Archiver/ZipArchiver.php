@@ -1,7 +1,7 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * @author    Igor Nikolaev <igor.sv.n@gmail.com>
- * @copyright Copyright (c) 2016-2018, Darvin Studio
+ * @copyright Copyright (c) 2016-2019, Darvin Studio
  * @link      https://www.darvin-studio.ru
  *
  * For the full copyright and license information, please view the LICENSE
@@ -13,9 +13,9 @@ namespace Darvin\Fileman\Archiver;
 use Symfony\Component\Finder\Finder;
 
 /**
- * Archiver
+ * Zip archiver
  */
-class Archiver
+class ZipArchiver implements ArchiverInterface
 {
     /**
      * @var \ZipArchive
@@ -31,13 +31,9 @@ class Archiver
     }
 
     /**
-     * @param string $dir      Directory
-     * @param string $pathname Archive pathname
-     *
-     * @return bool
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
-    public function archive($dir, $pathname)
+    public function archive(string $dir, string $pathname): bool
     {
         try {
             $finder = (new Finder())->in($dir);
@@ -74,12 +70,9 @@ class Archiver
     }
 
     /**
-     * @param string $pathname Archive pathname
-     * @param string $dir      Directory
-     *
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
-    public function extract($pathname, $dir)
+    public function extract(string $pathname, string $dir): void
     {
         if (true !== $this->zip->open($pathname)) {
             throw new \RuntimeException(sprintf('Unable to open archive "%s".', $pathname));
