@@ -11,7 +11,7 @@
 namespace Darvin\Fileman\Manager;
 
 use Darvin\Fileman\Archiver\ArchiverInterface;
-use Darvin\Fileman\Directory\DirectoryFetcher;
+use Darvin\Fileman\Directory\DirectoryFetcherInterface;
 
 /**
  * Local manager
@@ -29,11 +29,11 @@ class LocalManager extends AbstractManager
     private $filesToRemove;
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
-     * @param string                                     $projectPath Project path
-     * @param \Darvin\Fileman\Archiver\ArchiverInterface $archiver    Archiver
+     * @param \Darvin\Fileman\Directory\DirectoryFetcherInterface $dirFetcher  Directory fetcher
+     * @param string                                              $projectPath Project path
+     * @param \Darvin\Fileman\Archiver\ArchiverInterface          $archiver    Archiver
      */
-    public function __construct(DirectoryFetcher $dirFetcher, string $projectPath, ArchiverInterface $archiver)
+    public function __construct(DirectoryFetcherInterface $dirFetcher, string $projectPath, ArchiverInterface $archiver)
     {
         parent::__construct($dirFetcher, $projectPath);
 

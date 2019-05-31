@@ -17,7 +17,7 @@ use phpseclib\Net\SSH2;
 /**
  * SSH client
  */
-class SSHClient
+class SSHClient implements SSHClientInterface
 {
     /**
      * @var string
@@ -69,10 +69,7 @@ class SSHClient
     }
 
     /**
-     * @param string $command Command
-     *
-     * @return string
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
     public function exec(string $command): string
     {
@@ -86,10 +83,7 @@ class SSHClient
     }
 
     /**
-     * @param string $remotePathname File remote pathname
-     * @param string $localPathname  File local pathname
-     *
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
     public function get(string $remotePathname, string $localPathname): void
     {
@@ -99,10 +93,7 @@ class SSHClient
     }
 
     /**
-     * @param string $localPathname  File local pathname
-     * @param string $remotePathname File remote pathname
-     *
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
     public function put(string $localPathname, string $remotePathname): void
     {
@@ -112,7 +103,7 @@ class SSHClient
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getHost(): string
     {

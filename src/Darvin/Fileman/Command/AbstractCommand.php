@@ -12,6 +12,7 @@ namespace Darvin\Fileman\Command;
 
 use Darvin\Fileman\Archiver\ZipArchiver;
 use Darvin\Fileman\Directory\DirectoryFetcher;
+use Darvin\Fileman\Directory\DirectoryFetcherInterface;
 use Darvin\Fileman\Manager\LocalManager;
 use Darvin\Fileman\Manager\RemoteManager;
 use Darvin\Fileman\SSH\SSHClient;
@@ -56,32 +57,32 @@ DESCRIPTION
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input Input
      *
-     * @return \Darvin\Fileman\Directory\DirectoryFetcher
+     * @return \Darvin\Fileman\Directory\DirectoryFetcherInterface
      */
-    protected function createDirectoryFetcher(InputInterface $input): DirectoryFetcher
+    protected function createDirectoryFetcher(InputInterface $input): DirectoryFetcherInterface
     {
         return new DirectoryFetcher($input->getOption('parameters'));
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input      Input
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher Directory fetcher
+     * @param \Symfony\Component\Console\Input\InputInterface     $input      Input
+     * @param \Darvin\Fileman\Directory\DirectoryFetcherInterface $dirFetcher Directory fetcher
      *
      * @return \Darvin\Fileman\Manager\LocalManager
      */
-    protected function createLocalManager(InputInterface $input, DirectoryFetcher $dirFetcher): LocalManager
+    protected function createLocalManager(InputInterface $input, DirectoryFetcherInterface $dirFetcher): LocalManager
     {
         return new LocalManager($dirFetcher, $input->getArgument('project_path_local'), new ZipArchiver());
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input      Input
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher      $dirFetcher Directory fetcher
-     * @param \Symfony\Component\Console\Style\SymfonyStyle   $io         I/O
+     * @param \Symfony\Component\Console\Input\InputInterface     $input      Input
+     * @param \Darvin\Fileman\Directory\DirectoryFetcherInterface $dirFetcher Directory fetcher
+     * @param \Symfony\Component\Console\Style\SymfonyStyle       $io         I/O
      *
      * @return \Darvin\Fileman\Manager\RemoteManager
      */
-    protected function createRemoteManager(InputInterface $input, DirectoryFetcher $dirFetcher, SymfonyStyle $io): RemoteManager
+    protected function createRemoteManager(InputInterface $input, DirectoryFetcherInterface $dirFetcher, SymfonyStyle $io): RemoteManager
     {
         list($user, $host) = $this->getUserAndHost($input);
 

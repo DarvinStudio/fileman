@@ -10,8 +10,8 @@
 
 namespace Darvin\Fileman\Manager;
 
-use Darvin\Fileman\Directory\DirectoryFetcher;
-use Darvin\Fileman\SSH\SSHClient;
+use Darvin\Fileman\Directory\DirectoryFetcherInterface;
+use Darvin\Fileman\SSH\SSHClientInterface;
 
 /**
  * Remote manager
@@ -19,7 +19,7 @@ use Darvin\Fileman\SSH\SSHClient;
 class RemoteManager extends AbstractManager
 {
     /**
-     * @var \Darvin\Fileman\SSH\SSHClient
+     * @var \Darvin\Fileman\SSH\SSHClientInterface
      */
     private $sshClient;
 
@@ -29,11 +29,11 @@ class RemoteManager extends AbstractManager
     private $archiveFilenames;
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
-     * @param string                                     $projectPath Project path
-     * @param \Darvin\Fileman\SSH\SSHClient              $sshClient   SSH client
+     * @param \Darvin\Fileman\Directory\DirectoryFetcherInterface $dirFetcher  Directory fetcher
+     * @param string                                              $projectPath Project path
+     * @param \Darvin\Fileman\SSH\SSHClientInterface              $sshClient   SSH client
      */
-    public function __construct(DirectoryFetcher $dirFetcher, string $projectPath, SSHClient $sshClient)
+    public function __construct(DirectoryFetcherInterface $dirFetcher, string $projectPath, SSHClientInterface $sshClient)
     {
         parent::__construct($dirFetcher, $projectPath);
 

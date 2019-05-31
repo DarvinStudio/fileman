@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * Directory fetcher
  */
-class DirectoryFetcher
+class DirectoryFetcher implements DirectoryFetcherInterface
 {
     /**
      * @var string[]
@@ -31,10 +31,7 @@ class DirectoryFetcher
     }
 
     /**
-     * @param string $yaml Configuration YAML
-     *
-     * @return array
-     * @throws \RuntimeException
+     * {@inheritDoc}
      */
     public function fetchDirectories(string $yaml): array
     {

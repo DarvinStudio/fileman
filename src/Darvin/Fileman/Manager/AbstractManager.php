@@ -10,7 +10,7 @@
 
 namespace Darvin\Fileman\Manager;
 
-use Darvin\Fileman\Directory\DirectoryFetcher;
+use Darvin\Fileman\Directory\DirectoryFetcherInterface;
 
 /**
  * Manager abstract implementation
@@ -18,7 +18,7 @@ use Darvin\Fileman\Directory\DirectoryFetcher;
 abstract class AbstractManager
 {
     /**
-     * @var \Darvin\Fileman\Directory\DirectoryFetcher
+     * @var \Darvin\Fileman\Directory\DirectoryFetcherInterface
      */
     private $dirFetcher;
 
@@ -38,10 +38,10 @@ abstract class AbstractManager
     private $now;
 
     /**
-     * @param \Darvin\Fileman\Directory\DirectoryFetcher $dirFetcher  Directory fetcher
-     * @param string                                     $projectPath Project path
+     * @param \Darvin\Fileman\Directory\DirectoryFetcherInterface $dirFetcher  Directory fetcher
+     * @param string                                              $projectPath Project path
      */
-    public function __construct(DirectoryFetcher $dirFetcher, string $projectPath)
+    public function __construct(DirectoryFetcherInterface $dirFetcher, string $projectPath)
     {
         if ('' !== $projectPath) {
             $projectPath = rtrim($projectPath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
