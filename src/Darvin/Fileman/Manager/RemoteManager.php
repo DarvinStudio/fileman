@@ -55,8 +55,9 @@ class RemoteManager extends AbstractManager implements RemoteManagerInterface
             $command = sprintf(
                 'if [ -n "$(ls -A %s 2>/dev/null)" ]
                 then
-                    cd %1$s && /usr/bin/env zip -r %s%s .
-                    while [ ! -f %s ]
+                    cd %1$s && /usr/bin/env zip -r %s%s . &
+                    PID=$!
+                    while [ ps -p $PID > /dev/null ]
                     do
                         sleep 1
                     done
