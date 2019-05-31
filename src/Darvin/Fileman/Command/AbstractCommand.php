@@ -14,7 +14,9 @@ use Darvin\Fileman\Archiver\ZipArchiver;
 use Darvin\Fileman\Directory\DirectoryFetcher;
 use Darvin\Fileman\Directory\DirectoryFetcherInterface;
 use Darvin\Fileman\Manager\LocalManager;
+use Darvin\Fileman\Manager\LocalManagerInterface;
 use Darvin\Fileman\Manager\RemoteManager;
+use Darvin\Fileman\Manager\RemoteManagerInterface;
 use Darvin\Fileman\SSH\SSHClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -68,9 +70,9 @@ DESCRIPTION
      * @param \Symfony\Component\Console\Input\InputInterface     $input      Input
      * @param \Darvin\Fileman\Directory\DirectoryFetcherInterface $dirFetcher Directory fetcher
      *
-     * @return \Darvin\Fileman\Manager\LocalManager
+     * @return \Darvin\Fileman\Manager\LocalManagerInterface
      */
-    protected function createLocalManager(InputInterface $input, DirectoryFetcherInterface $dirFetcher): LocalManager
+    protected function createLocalManager(InputInterface $input, DirectoryFetcherInterface $dirFetcher): LocalManagerInterface
     {
         return new LocalManager($dirFetcher, $input->getArgument('project_path_local'), new ZipArchiver());
     }
@@ -80,9 +82,9 @@ DESCRIPTION
      * @param \Darvin\Fileman\Directory\DirectoryFetcherInterface $dirFetcher Directory fetcher
      * @param \Symfony\Component\Console\Style\SymfonyStyle       $io         I/O
      *
-     * @return \Darvin\Fileman\Manager\RemoteManager
+     * @return \Darvin\Fileman\Manager\RemoteManagerInterface
      */
-    protected function createRemoteManager(InputInterface $input, DirectoryFetcherInterface $dirFetcher, SymfonyStyle $io): RemoteManager
+    protected function createRemoteManager(InputInterface $input, DirectoryFetcherInterface $dirFetcher, SymfonyStyle $io): RemoteManagerInterface
     {
         list($user, $host) = $this->getUserAndHost($input);
 

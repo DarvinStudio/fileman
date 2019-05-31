@@ -16,7 +16,7 @@ use Darvin\Fileman\Directory\DirectoryFetcherInterface;
 /**
  * Local manager
  */
-class LocalManager extends AbstractManager
+class LocalManager extends AbstractManager implements LocalManagerInterface
 {
     /**
      * @var \Darvin\Fileman\Archiver\ArchiverInterface
@@ -53,9 +53,7 @@ class LocalManager extends AbstractManager
     }
 
     /**
-     * @param callable $callback Success callback
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function archiveFiles(callable $callback): array
     {
@@ -77,8 +75,7 @@ class LocalManager extends AbstractManager
     }
 
     /**
-     * @param callable $callback         Success callback
-     * @param array    $archiveFilenames Archive filenames
+     * {@inheritDoc}
      */
     public function extractFiles(callable $callback, array $archiveFilenames): void
     {

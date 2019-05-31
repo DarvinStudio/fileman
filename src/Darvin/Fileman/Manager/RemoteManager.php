@@ -16,7 +16,7 @@ use Darvin\Fileman\SSH\SSHClientInterface;
 /**
  * Remote manager
  */
-class RemoteManager extends AbstractManager
+class RemoteManager extends AbstractManager implements RemoteManagerInterface
 {
     /**
      * @var \Darvin\Fileman\SSH\SSHClientInterface
@@ -43,9 +43,7 @@ class RemoteManager extends AbstractManager
     }
 
     /**
-     * @param callable $callback Success callback
-     *
-     * @return array
+     * {@inheritDoc}
      */
     public function archiveFiles(callable $callback): array
     {
@@ -84,8 +82,7 @@ class RemoteManager extends AbstractManager
     }
 
     /**
-     * @param callable $callback         Success callback
-     * @param string   $localProjectPath Local project path
+     * {@inheritDoc}
      */
     public function downloadArchives(callable $callback, string $localProjectPath): void
     {
@@ -97,7 +94,7 @@ class RemoteManager extends AbstractManager
     }
 
     /**
-     * @param callable $callback Success callback
+     * {@inheritDoc}
      */
     public function extractFiles(callable $callback): void
     {
@@ -117,7 +114,7 @@ class RemoteManager extends AbstractManager
     }
 
     /**
-     * @param callable $callback Success callback
+     * {@inheritDoc}
      */
     public function removeArchives(callable $callback): void
     {
@@ -133,9 +130,7 @@ class RemoteManager extends AbstractManager
     }
 
     /**
-     * @param callable $callback         Success callback
-     * @param string   $localProjectPath Local project path
-     * @param array    $archiveFilenames Archive filenames
+     * {@inheritDoc}
      */
     public function uploadArchives(callable $callback, string $localProjectPath, array $archiveFilenames): void
     {

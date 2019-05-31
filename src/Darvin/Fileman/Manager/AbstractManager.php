@@ -15,7 +15,7 @@ use Darvin\Fileman\Directory\DirectoryFetcherInterface;
 /**
  * Manager abstract implementation
  */
-abstract class AbstractManager
+abstract class AbstractManager implements ManagerInterface
 {
     /**
      * @var \Darvin\Fileman\Directory\DirectoryFetcherInterface
@@ -55,7 +55,7 @@ abstract class AbstractManager
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function getProjectPath(): string
     {
