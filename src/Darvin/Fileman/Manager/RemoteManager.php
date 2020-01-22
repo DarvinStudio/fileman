@@ -64,7 +64,6 @@ class RemoteManager extends AbstractManager implements RemoteManagerInterface
                 fi',
                 $dirPathname,
                 str_repeat('../', substr_count($dir, DIRECTORY_SEPARATOR) + 1),
-                $filename,
                 $filename
             );
 
