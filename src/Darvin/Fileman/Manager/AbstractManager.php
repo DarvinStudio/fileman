@@ -81,13 +81,13 @@ abstract class AbstractManager implements ManagerInterface
             $config = null;
             $attr   = null;
             $files  = [
-                'app/config/parameters.yml' => [
-                    'format' => DirectoryFetcherInterface::FORMAT_YAML,
-                    'root'   => 'web',
-                ],
                 'config/parameters.yaml' => [
                     'format' => DirectoryFetcherInterface::FORMAT_YAML,
                     'root'   => 'public',
+                ],
+                'app/config/parameters.yml' => [
+                    'format' => DirectoryFetcherInterface::FORMAT_YAML,
+                    'root'   => 'web',
                 ],
             ];
 
