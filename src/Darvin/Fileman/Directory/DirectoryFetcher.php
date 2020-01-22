@@ -42,24 +42,29 @@ class DirectoryFetcher implements DirectoryFetcherInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchDirectories(string $config, string $rootDir): array
+    public function fetchDirectories(string $config, string $format, string $rootDir): array
     {
-        $values = null;
+        switch ($format) {
+            case self::FORMAT_DOTENV:
+                if (null === $this->dotenv) {
+                    throw new \RuntimeException('Symfony Dotenv component is not installed.');
+                }
 
-        if (null !== $this->dotenv) {
-            try {
                 $values = $this->dotenv->parse($config);
-            } catch (FormatException $ex) {
-            }
-        }
-        if (null === $values) {
-            $yaml = Yaml::parse($config);
 
-            if (!isset($yaml['parameters'])) {
-                throw new \RuntimeException(sprintf('Configuration must contain root node "parameters" (%s).', $config));
-            }
+                break;
+            case self::FORMAT_YAML:
+                $yaml = Yaml::parse($config);
 
-            $values = $yaml['parameters'];
+                if (!isset($yaml['parameters'])) {
+                    throw new \RuntimeException(sprintf('Configuration must contain root node "parameters" (%s).', $config));
+                }
+
+                $values = $yaml['parameters'];
+
+                break;
+            default:
+                throw new \RuntimeException(sprintf('Format "%s" is not supported.', $format));
         }
 
         $values = array_combine(array_map('mb_strtolower', array_keys($values)), $values);

@@ -11,6 +11,7 @@
 namespace Darvin\Fileman\Manager;
 
 use Darvin\Fileman\Directory\DirectoryFetcherInterface;
+use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * Manager abstract implementation
@@ -77,26 +78,38 @@ abstract class AbstractManager implements ManagerInterface
     protected function getDirs(): array
     {
         if (null === $this->dirs) {
-            $config  = null;
-            $rootDir = null;
+            $config = null;
+            $attr   = null;
+            $files  = [
+                'app/config/parameters.yml' => [
+                    'format' => DirectoryFetcherInterface::FORMAT_YAML,
+                    'root'   => 'web',
+                ],
+                'config/parameters.yaml' => [
+                    'format' => DirectoryFetcherInterface::FORMAT_YAML,
+                    'root'   => 'public',
+                ],
+            ];
 
-            foreach ([
-                'app/config/parameters.yml' => 'web',
-                'config/parameters.yaml'    => 'public',
-                '.env'                      => 'public',
-            ] as $relativePathname => $rootDir) {
+            if (class_exists(Dotenv::class)) {
+                $files['.env'] = [
+                    'format' => DirectoryFetcherInterface::FORMAT_DOTENV,
+                    'root'   => 'public',
+                ];
+            }
+            foreach ($files as $pathname => $attr) {
                 try {
-                    $config = $this->readConfiguration($this->getProjectPath().$relativePathname);
+                    $config = $this->readConfiguration($this->getProjectPath().$pathname);
 
                     break;
                 } catch (\RuntimeException $ex) {
                 }
             }
-            if (null === $config || null === $rootDir) {
+            if (null === $config || null === $attr) {
                 throw new \RuntimeException('Unable to find any supported Symfony configuration file.');
             }
 
-            $this->dirs = $this->dirFetcher->fetchDirectories($config, $rootDir);
+            $this->dirs = $this->dirFetcher->fetchDirectories($config, $attr['format'], $attr['root']);
         }
 
         return $this->dirs;

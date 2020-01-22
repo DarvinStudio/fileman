@@ -15,12 +15,16 @@ namespace Darvin\Fileman\Directory;
  */
 interface DirectoryFetcherInterface
 {
+    public const FORMAT_DOTENV = 'dotenv';
+    public const FORMAT_YAML   = 'yaml';
+
     /**
      * @param string $config  Configuration file content
+     * @param string $format  Configuration file format
      * @param string $rootDir Root directory
      *
      * @return array
      * @throws \RuntimeException
      */
-    public function fetchDirectories(string $config, string $rootDir): array;
+    public function fetchDirectories(string $config, string $format, string $rootDir): array;
 }
