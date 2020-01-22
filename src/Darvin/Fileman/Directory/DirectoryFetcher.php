@@ -71,11 +71,9 @@ class DirectoryFetcher implements DirectoryFetcherInterface
         $dirs   = [];
 
         foreach ($this->params as $param) {
-            if (!array_key_exists($param, $values)) {
-                throw new \RuntimeException(sprintf('Parameter "%s" does not exist (%s).', $param, $config));
+            if (array_key_exists($param, $values)) {
+                $dirs[$param] = implode(DIRECTORY_SEPARATOR, [$rootDir, trim($values[$param], DIRECTORY_SEPARATOR)]);
             }
-
-            $dirs[$param] = implode(DIRECTORY_SEPARATOR, [$rootDir, trim($values[$param], DIRECTORY_SEPARATOR)]);
         }
 
         return $dirs;
