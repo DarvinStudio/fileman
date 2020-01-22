@@ -63,18 +63,40 @@ abstract class AbstractManager implements ManagerInterface
     }
 
     /**
+     * @param string $pathname Configuration file pathname
+     *
      * @return string
      * @throws \RuntimeException
      */
-    abstract protected function readConfiguration(): string;
+    abstract protected function readConfiguration(string $pathname): string;
 
     /**
      * @return array
+     * @throws \RuntimeException
      */
     protected function getDirs(): array
     {
         if (null === $this->dirs) {
-            $this->dirs = $this->dirFetcher->fetchDirectories($this->readConfiguration());
+            $config  = null;
+            $rootDir = null;
+
+            foreach ([
+                'app/config/parameters.yml' => 'web',
+                'config/parameters.yaml'    => 'public',
+                '.env'                      => 'public',
+            ] as $relativePathname => $rootDir) {
+                try {
+                    $config = $this->readConfiguration($this->getProjectPath().$relativePathname);
+
+                    break;
+                } catch (\RuntimeException $ex) {
+                }
+            }
+            if (null === $config || null === $rootDir) {
+                throw new \RuntimeException('Unable to find any supported Symfony configuration file.');
+            }
+
+            $this->dirs = $this->dirFetcher->fetchDirectories($config, $rootDir);
         }
 
         return $this->dirs;

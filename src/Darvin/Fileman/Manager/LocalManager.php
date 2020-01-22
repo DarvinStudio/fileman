@@ -97,18 +97,8 @@ class LocalManager extends AbstractManager implements LocalManagerInterface
     /**
      * {@inheritDoc}
      */
-    protected function readConfiguration(): string
+    protected function readConfiguration(string $pathname): string
     {
-        $pathname = $this->getProjectPath().'.env';
-
-        $content = @file_get_contents($pathname);
-
-        if (false !== $content) {
-            return $content;
-        }
-
-        $pathname = $this->getProjectPath().'app/config/parameters.yml';
-
         $content = @file_get_contents($pathname);
 
         if (false === $content) {

@@ -66,7 +66,7 @@ abstract class AbstractCommand extends Command
      */
     protected function createDirectoryFetcher(InputInterface $input): DirectoryFetcherInterface
     {
-        return new DirectoryFetcher(new Dotenv(), $input->getOption('parameters'));
+        return new DirectoryFetcher(class_exists(Dotenv::class) ? new Dotenv() : null, $input->getOption('parameters'));
     }
 
     /**

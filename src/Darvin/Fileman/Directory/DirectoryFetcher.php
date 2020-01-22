@@ -20,7 +20,7 @@ use Symfony\Component\Yaml\Yaml;
 class DirectoryFetcher implements DirectoryFetcherInterface
 {
     /**
-     * @var \Symfony\Component\Dotenv\Dotenv
+     * @var \Symfony\Component\Dotenv\Dotenv|null
      */
     private $dotenv;
 
@@ -30,10 +30,10 @@ class DirectoryFetcher implements DirectoryFetcherInterface
     private $params;
 
     /**
-     * @param \Symfony\Component\Dotenv\Dotenv $dotenv Dotenv
-     * @param string[]                         $params Directory parameters
+     * @param \Symfony\Component\Dotenv\Dotenv|null $dotenv Dotenv
+     * @param string[]                              $params Directory parameters
      */
-    public function __construct(Dotenv $dotenv, array $params)
+    public function __construct(?Dotenv $dotenv, array $params)
     {
         $this->dotenv = $dotenv;
         $this->params = $params;
@@ -42,16 +42,15 @@ class DirectoryFetcher implements DirectoryFetcherInterface
     /**
      * {@inheritDoc}
      */
-    public function fetchDirectories(string $config): array
+    public function fetchDirectories(string $config, string $rootDir): array
     {
-        $dotenv = false;
         $values = null;
 
-        try {
-            $values = $this->dotenv->parse($config);
-
-            $dotenv = true;
-        } catch (FormatException $ex) {
+        if (null !== $this->dotenv) {
+            try {
+                $values = $this->dotenv->parse($config);
+            } catch (FormatException $ex) {
+            }
         }
         if (null === $values) {
             $yaml = Yaml::parse($config);
@@ -71,7 +70,7 @@ class DirectoryFetcher implements DirectoryFetcherInterface
                 throw new \RuntimeException(sprintf('Parameter "%s" does not exist (%s).', $param, $config));
             }
 
-            $dirs[$param] = implode(DIRECTORY_SEPARATOR, [$dotenv ? 'public' : 'web', trim($values[$param], DIRECTORY_SEPARATOR)]);
+            $dirs[$param] = implode(DIRECTORY_SEPARATOR, [$rootDir, trim($values[$param], DIRECTORY_SEPARATOR)]);
         }
 
         return $dirs;

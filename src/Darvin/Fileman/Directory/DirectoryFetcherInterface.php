@@ -16,10 +16,11 @@ namespace Darvin\Fileman\Directory;
 interface DirectoryFetcherInterface
 {
     /**
-     * @param string $config Configuration file content
+     * @param string $config  Configuration file content
+     * @param string $rootDir Root directory
      *
      * @return array
      * @throws \RuntimeException
      */
-    public function fetchDirectories(string $config): array;
+    public function fetchDirectories(string $config, string $rootDir): array;
 }

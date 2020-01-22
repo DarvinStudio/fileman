@@ -147,13 +147,8 @@ class RemoteManager extends AbstractManager implements RemoteManagerInterface
     /**
      * {@inheritDoc}
      */
-    protected function readConfiguration(): string
+    protected function readConfiguration(string $pathname): string
     {
-        try {
-            return $this->sshClient->exec(sprintf('cat %s.env', $this->getProjectPath()));
-        } catch (\RuntimeException $ex) {
-        }
-
-        return $this->sshClient->exec(sprintf('cat %sapp/config/parameters.yml', $this->getProjectPath()));
+        return $this->sshClient->exec(sprintf('cat %s', $pathname));
     }
 }
