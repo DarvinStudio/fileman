@@ -11,7 +11,6 @@
 namespace Darvin\Fileman\Directory;
 
 use Symfony\Component\Dotenv\Dotenv;
-use Symfony\Component\Dotenv\Exception\FormatException;
 use Symfony\Component\Yaml\Yaml;
 
 /**

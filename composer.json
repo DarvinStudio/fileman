@@ -13,18 +13,18 @@
     "require": {
         "ext-zip": "*",
         "phpseclib/phpseclib": "^2.0",
-        "symfony/console": "^4.4",
-        "symfony/finder": "^4.4",
-        "symfony/yaml": "^4.4"
+        "symfony/console": "^4.4 || ^5.0",
+        "symfony/finder": "^4.4 || ^5.0",
+        "symfony/yaml": "^4.4 || ^5.0"
     },
     "require-dev": {
         "herrera-io/phar-update": "^2.0",
-        "symfony/dotenv": "^4.4"
+        "symfony/dotenv": "^4.4 || ^5.0"
     },
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.1.3"
+            "php": "7.2.5"
         }
     },
     "autoload": {

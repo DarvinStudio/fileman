@@ -36,7 +36,7 @@ class PullCommand extends AbstractCommand
     /**
      * {@inheritDoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -58,5 +58,7 @@ class PullCommand extends AbstractCommand
 
         $io->comment('Extracting files...');
         $localManager->extractFiles($callback, $archiveFilenames);
+
+        return 0;
     }
 }

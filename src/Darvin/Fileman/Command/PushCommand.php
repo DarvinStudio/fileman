@@ -36,7 +36,7 @@ class PushCommand extends AbstractCommand
     /**
      * {@inheritDoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -58,5 +58,7 @@ class PushCommand extends AbstractCommand
 
         $io->comment('Removing remote archives...');
         $remoteManager->removeArchives($callback);
+
+        return 0;
     }
 }
