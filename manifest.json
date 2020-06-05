@@ -82,5 +82,11 @@
         "sha1": "d3f1f065a2f17bebeb4bbe5c75f7d519290bcc98",
         "url": "http:\/\/darvinstudio.github.io\/fileman\/downloads\/fileman-6.0.3.phar",
         "version": "6.0.3"
+    },
+    {
+        "name": "fileman.phar",
+        "sha1": "59650e0fa9453d5a774ff4176800f0d5a1c2d897",
+        "url": "http:\/\/darvinstudio.github.io\/fileman\/downloads\/fileman-6.0.4.phar",
+        "version": "6.0.4"
     }
 ]
