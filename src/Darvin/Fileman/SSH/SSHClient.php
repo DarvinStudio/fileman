@@ -20,6 +20,12 @@ use phpseclib\Net\SSH2;
 class SSHClient implements SSHClientInterface
 {
     /**
+     * Connection timeout in seconds, practically unlimited. PHP_INT_MAX is rejected by fsockopen() since PHP 8.0 (ValueError),
+     * 100 years is accepted on every PHP version and on 32-bit builds.
+     */
+    private const TIMEOUT = 3153600000;
+
+    /**
      * @var string
      */
     private $host;
@@ -56,7 +62,7 @@ class SSHClient implements SSHClientInterface
 
         $this->host = $host;
 
-        $this->session = new SSH2($host, $port, PHP_INT_MAX);
+        $this->session = new SSH2($host, $port, self::TIMEOUT);
         $this->session->enableQuietMode();
 
         $key = $this->getKey($keyPathname, $password);
