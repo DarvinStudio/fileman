@@ -1,0 +1,17 @@
+parameters:
+    ignoreErrors:
+        -
+            message: '#^Binary operation "\+" between non\-empty\-string and 1 results in an error\.$#'
+            identifier: binaryOp.invalid
+            count: 1
+            path: release.php
+        -
+            message: '#^Strict comparison using \=\=\= between null and array\{format\: ''dotenv''\|''yaml'', root\: ''public''\|''web''\} will always evaluate to false\.$#'
+            identifier: identical.alwaysFalse
+            count: 1
+            path: src/Darvin/Fileman/Manager/AbstractManager.php
+        -
+            message: '#^Property Darvin\\Fileman\\SSH\\SSHClient\:\:\$scp \(phpseclib\\Net\\SCP\) does not accept null\.$#'
+            identifier: assign.propertyType
+            count: 1
+            path: src/Darvin/Fileman/SSH/SSHClient.php
